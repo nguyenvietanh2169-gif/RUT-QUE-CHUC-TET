@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lắc Quẻ Đầu Năm 2026</title>
+    <style>
+        :root {
+            --primary-red: #d32f2f;
+            --gold: #ffd700;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle, #b30000, #660000);
+            color: var(--gold);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h1 { font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px; }
+
+        #container { position: relative; width: 250px; height: 350px; }
+
+        /* Hiệu ứng rung ống quẻ */
+        #ong-que {
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.1s;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        }
+
+        .shaking {
+            animation: shake 0.15s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            20% { transform: translate(-1px, -2px) rotate(-5deg); }
+            40% { transform: translate(-3px, 0px) rotate(5deg); }
+            60% { transform: translate(3px, 2px) rotate(0deg); }
+            80% { transform: translate(1px, -1px) rotate(5deg); }
+            100% { transform: translate(-1px, 2px) rotate(-5deg); }
+        }
+
+        /* Kết quả quẻ */
+        #ket-qua {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 215, 0, 0.95);
+            color: #b30000;
+            padding: 30px;
+            border-radius: 15px;
+            border: 5px double #b30000;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            z-index: 100;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #loi-chuc {
+            font-size: 1.4rem;
+            font-weight: bold;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        button {
+            background: var(--gold);
+            color: #b30000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
+
+        #btn-close { margin-top: 20px; padding: 10px 20px; font-size: 1rem; }
+
+        /* Hiệu ứng pháo hoa đơn giản */
+        .firework { position: absolute; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+    </style>
+</head>
+<body>
+
+    <h1>🧧 XIN QUẺ ĐẦU XUÂN 🧧</h1>
+    
+    <div id="container">
+        <img id="ong-que" src="https://i.imgur.com/8YlQk6l.png" alt="Ống quẻ">
+    </div>
+
+    <button id="start-btn">BẮT ĐẦU LẮC</button>
+
+    <div id="ket-qua">
+        <p>✨ Quẻ của bạn là: ✨</p>
+        <div id="loi-chuc"></div>
+        <button id="btn-close">Rút lại</button>
+    </div>
+
+    <script>
+        const loiChucs = [
+            "🧧 Lương tăng như giá xăng\nSếp hiền như ông Bụt",
+            "🌸 Ăn không sợ béo\nVí không sợ héo",
+            "✨ Người ta đi chúc Tết đôi\nCòn tôi chỉ muốn... thôi chúc gì!",
+            "💰 Vạn sự như ý - Tỷ sự như mơ\nTriệu lần không lag - Deadline không chờ",
+            "🔥 KPI thì ít\nTiền tích lũy thì nhiều",
+            "🎋 Bắc Đẩu đã có Nam Tào\nCòn bạn đã có bao nhiêu lì xì?",
+            "🧧 Năm mới bớt lầm lì\nChỉ mong nhiều lì xì",
+            "🦄 Facebook luôn đầy Like\nNgoài đời luôn đầy Lộc"
+        ];
+
+        const startBtn = document.getElementById('start-btn');
+        const ongQue = document.getElementById('ong-que');
+        const ketQua = document.getElementById('ket-qua');
+        const txtLoiChuc = document.getElementById('loi-chuc');
+        const btnClose = document.getElementById('btn-close');
+
+        let isShaking = false;
+
+        startBtn.onclick = function() {
+            if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission().then(state => {
+                    if (state === 'granted') startAction();
+                });
+            } else {
+                startAction();
+            }
+        };
+
+        function startAction() {
+            startBtn.style.display = 'none';
+            initSensor();
+            alert("Sẵn sàng! Hãy cầm chắc điện thoại và LẮC nhé!");
+        }
+
+        function initSensor() {
+            let lastX, lastY, lastZ;
+            let threshold = 18; 
+
+            window.addEventListener('devicemotion', (e) => {
+                if (isShaking) return;
+                let acc = e.accelerationIncludingGravity;
+                let diff = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ);
+                
+                if (diff > threshold) {
+                    isShaking = true;
+                    ongQue.classList.add('shaking');
+                    if(navigator.vibrate) navigator.vibrate(300);
+
+                    setTimeout(() => {
+                        ongQue.classList.remove('shaking');
+                        showResult();
+                    }, 1200);
+                }
+                lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+            });
+        }
+
+        function showResult() {
+            const randomMsg = loiChucs[Math.floor(Math.random() * loiChucs.length)];
+            txtLoiChuc.innerText = randomMsg;
+            ketQua.style.display = 'block';
+        }
+
+        btnClose.onclick = () => {
+            ketQua.style.display = 'none';
+            isShaking = false;
+        };
+    </script>
+</body>
+</html>
