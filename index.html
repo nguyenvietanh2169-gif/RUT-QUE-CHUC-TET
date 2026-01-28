@@ -3,213 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lắc Quẻ Đầu Năm 2026</title>
+    <title>Lắc Quẻ 3D - Xuân 2026</title>
     <style>
-        :root {
-            --primary-red: #d32f2f;
-            --gold: #ffd700;
-        }
+        :root { --gold: #ffd700; --red: #b30000; }
         body {
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(circle, #b30000, #660000);
-            color: var(--gold);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            overflow: hidden;
+            margin: 0; background: radial-gradient(circle, #b30000, #4a0000);
+            height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; overflow: hidden;
+            font-family: 'Segoe UI', sans-serif; color: var(--gold);
         }
 
-        h1 { font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px; z-index: 10; }
+        /* 1. Cấu trúc ống quẻ 3D */
+        #container {
+            position: relative; width: 200px; height: 300px;
+            perspective: 1000px; cursor: pointer;
+        }
+        .cup-layer { position: absolute; width: 100%; bottom: 0; }
+        #cup-back { z-index: 1; filter: brightness(0.6); }
+        #sticks { 
+            z-index: 2; bottom: 50px; left: 10%; width: 80%; 
+            transition: transform 0.1s; 
+        }
+        #cup-front { z-index: 3; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
 
-        #container { position: relative; width: 250px; height: 350px; cursor: pointer; z-index: 5; }
-
-        #ong-que {
-            width: 100%;
-            transition: transform 0.1s;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        /* 2. Hiệu ứng thẻ quẻ bay ra */
+        #single-stick {
+            position: fixed; width: 40px; height: 180px;
+            background: #f3e5ab; border: 2px solid #8d6e63;
+            border-radius: 5px; z-index: 50; display: none;
+            color: #b30000; writing-mode: vertical-rl;
+            text-align: center; font-weight: bold; padding: 10px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            left: 50%; top: 50%; transform: translate(-50%, -50%);
         }
 
-        .shaking { animation: shake 0.15s infinite; }
+        /* Animation lắc */
+        .shaking #cup-front, .shaking #cup-back { animation: shake-cup 0.15s infinite; }
+        .shaking #sticks { animation: shake-sticks 0.1s infinite; }
 
-        @keyframes shake {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            20% { transform: translate(-1px, -2px) rotate(-5deg); }
-            40% { transform: translate(-3px, 0px) rotate(5deg); }
-            60% { transform: translate(3px, 2px) rotate(0deg); }
-            80% { transform: translate(1px, -1px) rotate(5deg); }
-            100% { transform: translate(-1px, 2px) rotate(-5deg); }
+        @keyframes shake-cup {
+            0% { transform: rotate(2deg); }
+            100% { transform: rotate(-2deg); }
+        }
+        @keyframes shake-sticks {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px) rotate(3deg); }
         }
 
+        /* 3. Bảng kết quả */
         #ket-qua {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            color: #b30000;
-            padding: 30px;
-            border-radius: 15px;
-            border: 5px double #b30000;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
-            z-index: 100;
-            width: 80%;
-            max-width: 300px;
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: #fffdf0; color: #b30000; padding: 30px;
+            border-radius: 15px; border: 5px double #b30000;
+            z-index: 100; width: 280px; text-align: center;
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        #loi-chuc { font-size: 1.4rem; font-weight: bold; line-height: 1.6; white-space: pre-line; margin: 20px 0; }
+        #ket-qua.show { display: block; transform: translate(-50%, -50%) scale(1); }
 
         .btn {
-            background: var(--gold);
-            color: #b30000;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: 0.3s;
+            background: var(--gold); color: var(--red);
+            border: none; padding: 12px 30px; border-radius: 25px;
+            font-weight: bold; cursor: pointer; margin-top: 15px;
         }
-        .btn:hover { transform: scale(1.05); background: #fff; }
-
-        .firework {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
-            animation: explode 1s ease-out forwards;
-        }
-
-        @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(20); opacity: 0; }
-        }
-
-        #instruction { margin-top: 15px; font-style: italic; opacity: 0.8; }
     </style>
 </head>
 <body>
 
-    <h1>🧧 XIN QUẺ ĐẦU XUÂN 🧧</h1>
-    
+    <h1>🧧 XIN QUẺ LINH ỨNG 🧧</h1>
+
     <div id="container">
-        <img id="ong-que" src="https://i.imgur.com/8YlQk6l.png" alt="Ống quẻ">
+        <img id="cup-back" class="cup-layer" src="https://i.imgur.com/8YlQk6l.png">
+        <img id="sticks" class="cup-layer" src="https://i.imgur.com/uX8DkX7.png">
+        <img id="cup-front" class="cup-layer" src="https://i.imgur.com/8YlQk6l.png">
     </div>
 
-    <p id="instruction">Nhấn vào ống quẻ hoặc lắc điện thoại</p>
-    <button id="start-btn" class="btn">BẮT ĐẦU NGAY</button>
+    <div id="single-stick">CÁT TƯỜNG</div>
+
+    <p>Chạm vào ống hoặc lắc máy để xin quẻ</p>
+    <button id="start-btn" class="btn">BẮT ĐẦU</button>
 
     <div id="ket-qua">
-        <p>✨ Quẻ của bạn là: ✨</p>
-        <div id="loi-chuc"></div>
-        <button id="btn-close" class="btn" style="font-size: 1rem; padding: 10px 20px;">Rút quẻ khác</button>
+        <h2 style="margin-top:0">✨ CHÚC MỪNG ✨</h2>
+        <div id="loi-chuc" style="font-size: 1.2rem; min-height: 60px;"></div>
+        <button class="btn" onclick="reset()">Xin quẻ khác</button>
     </div>
 
-    <audio id="sfx-shake" src="https://www.soundjay.com/misc/sounds/wooden-clatter-1.mp3" preload="auto"></audio>
+    <audio id="sfx" src="https://www.soundjay.com/misc/sounds/wooden-clatter-1.mp3"></audio>
 
     <script>
         const loiChucs = [
-            "🧧 Lương tăng như giá xăng\nSếp hiền như ông Bụt",
-            "🌸 Ăn không sợ béo\nVí không sợ héo",
-            "✨ Người ta đi chúc Tết đôi\nCòn tôi chỉ muốn... thôi chúc gì!",
-            "💰 Vạn sự như ý - Tỷ sự như mơ\nTriệu lần không lag - Deadline không chờ",
-            "🔥 KPI thì ít\nTiền tích lũy thì nhiều",
-            "🎋 Bắc Đẩu đã có Nam Tào\nCòn bạn đã có bao nhiêu lì xì?",
-            "🧧 Năm mới bớt lầm lì\nChỉ mong nhiều lì xì",
-            "🦄 Facebook luôn đầy Like\nNgoài đời luôn đầy Lộc"
+            "🧧 Tiền vô như nước sông Đà\nTiền ra nhỏ giọt như cà phê phin",
+            "🌸 Vạn sự như ý\nĐắc lộc toàn gia",
+            "💰 Sức khỏe vô biên\nKiếm được nhiều tiền",
+            "✨ Tình duyên phơi phới\nHạnh phúc ngập trời"
         ];
 
-        const startBtn = document.getElementById('start-btn');
-        const ongQue = document.getElementById('ong-que');
-        const ketQua = document.getElementById('ket-qua');
-        const txtLoiChuc = document.getElementById('loi-chuc');
-        const btnClose = document.getElementById('btn-close');
-        const sfxShake = document.getElementById('sfx-shake');
-
         let isShaking = false;
-        let lastX = 0, lastY = 0, lastZ = 0;
+        const container = document.getElementById('container');
+        const singleStick = document.getElementById('single-stick');
+        const ketQua = document.getElementById('ket-qua');
+        const sfx = document.getElementById('sfx');
 
-        // Xử lý khi nhấn nút bắt đầu (Yêu cầu quyền trên iOS)
-        startBtn.onclick = function() {
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission()
-                    .then(state => {
-                        if (state === 'granted') initSensor();
-                    })
-                    .catch(console.error);
-            } else {
-                initSensor();
-            }
-            startBtn.style.display = 'none';
-        };
-
-        // Hàm thực hiện hành động lắc
-        function performShake() {
+        // Hàm xử lý chính
+        function startShake() {
             if (isShaking) return;
             isShaking = true;
-            
-            // Chạy âm thanh và rung
-            sfxShake.currentTime = 0;
-            sfxShake.play();
-            ongQue.classList.add('shaking');
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            container.classList.add('shaking');
+            sfx.play();
 
             setTimeout(() => {
-                ongQue.classList.remove('shaking');
-                showResult();
-            }, 1200);
+                container.classList.remove('shaking');
+                launchStick();
+            }, 1500);
         }
 
-        // Click chuột (Dành cho PC hoặc khi không muốn lắc)
-        document.getElementById('container').onclick = performShake;
+        // Hiệu ứng thẻ bay ra
+        function launchStick() {
+            singleStick.style.display = 'block';
+            // Animation bay từ ống lên trung tâm
+            singleStick.animate([
+                { transform: 'translate(-50%, 100%) rotate(0deg)', opacity: 0 },
+                { transform: 'translate(-50%, -50%) rotate(720deg)', opacity: 1 }
+            ], { duration: 800, easing: 'ease-out' }).onfinish = () => {
+                setTimeout(() => {
+                    singleStick.style.display = 'none';
+                    showFinalResult();
+                }, 600);
+            };
+        }
 
-        function initSensor() {
-            let threshold = 15; 
+        function showFinalResult() {
+            document.getElementById('loi-chuc').innerText = loiChucs[Math.floor(Math.random()*loiChucs.length)];
+            ketQua.classList.add('show');
+        }
+
+        function reset() {
+            ketQua.classList.remove('show');
+            setTimeout(() => { isShaking = false; }, 500);
+        }
+
+        // Tương tác
+        container.onclick = startShake;
+        document.getElementById('start-btn').onclick = (e) => {
+            e.target.style.display = 'none';
+            // Xin quyền cảm biến nếu là iOS
+            if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission().then(res => { if(res==='granted') initAcc(); });
+            } else { initAcc(); }
+        };
+
+        function initAcc() {
+            let lastA = 0;
             window.addEventListener('devicemotion', (e) => {
-                let acc = e.accelerationIncludingGravity;
-                if (!acc.x) return;
-
-                let diff = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ);
-                if (diff > threshold) {
-                    performShake();
-                }
-                lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+                let a = e.accelerationIncludingGravity;
+                let total = Math.abs(a.x + a.y + a.z);
+                if (Math.abs(total - lastA) > 15) startShake();
+                lastA = total;
             });
         }
-
-        function showResult() {
-            const randomMsg = loiChucs[Math.floor(Math.random() * loiChucs.length)];
-            txtLoiChuc.innerText = randomMsg;
-            ketQua.style.display = 'block';
-            createFireworks();
-        }
-
-        function createFireworks() {
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const fw = document.createElement('div');
-                    fw.className = 'firework';
-                    fw.style.left = Math.random() * 100 + 'vw';
-                    fw.style.top = Math.random() * 100 + 'vh';
-                    fw.style.backgroundColor = ['#ffd700', '#ff4444', '#ffffff', '#ffeb3b'][Math.floor(Math.random() * 4)];
-                    document.body.appendChild(fw);
-                    setTimeout(() => fw.remove(), 1000);
-                }, i * 100);
-            }
-        }
-
-        btnClose.onclick = () => {
-            ketQua.style.display = 'none';
-            isShaking = false;
-        };
     </script>
 </body>
 </html>
