@@ -24,21 +24,17 @@
             overflow: hidden;
         }
 
-        h1 { font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        h1 { font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 20px; z-index: 10; }
 
-        #container { position: relative; width: 250px; height: 350px; }
+        #container { position: relative; width: 250px; height: 350px; cursor: pointer; z-index: 5; }
 
-        /* Hiệu ứng rung ống quẻ */
         #ong-que {
             width: 100%;
-            cursor: pointer;
             transition: transform 0.1s;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
         }
 
-        .shaking {
-            animation: shake 0.15s infinite;
-        }
+        .shaking { animation: shake 0.15s infinite; }
 
         @keyframes shake {
             0% { transform: translate(2px, 1px) rotate(0deg); }
@@ -49,14 +45,13 @@
             100% { transform: translate(-1px, 2px) rotate(-5deg); }
         }
 
-        /* Kết quả quẻ */
         #ket-qua {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 215, 0, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             color: #b30000;
             padding: 30px;
             border-radius: 15px;
@@ -67,14 +62,9 @@
             max-width: 300px;
         }
 
-        #loi-chuc {
-            font-size: 1.4rem;
-            font-weight: bold;
-            line-height: 1.6;
-            white-space: pre-line;
-        }
+        #loi-chuc { font-size: 1.4rem; font-weight: bold; line-height: 1.6; white-space: pre-line; margin: 20px 0; }
 
-        button {
+        .btn {
             background: var(--gold);
             color: #b30000;
             border: none;
@@ -84,13 +74,26 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); background: #fff; }
+
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: explode 1s ease-out forwards;
         }
 
-        #btn-close { margin-top: 20px; padding: 10px 20px; font-size: 1rem; }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(20); opacity: 0; }
+        }
 
-        /* Hiệu ứng pháo hoa đơn giản */
-        .firework { position: absolute; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+        #instruction { margin-top: 15px; font-style: italic; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -101,13 +104,16 @@
         <img id="ong-que" src="https://i.imgur.com/8YlQk6l.png" alt="Ống quẻ">
     </div>
 
-    <button id="start-btn">BẮT ĐẦU LẮC</button>
+    <p id="instruction">Nhấn vào ống quẻ hoặc lắc điện thoại</p>
+    <button id="start-btn" class="btn">BẮT ĐẦU NGAY</button>
 
     <div id="ket-qua">
         <p>✨ Quẻ của bạn là: ✨</p>
         <div id="loi-chuc"></div>
-        <button id="btn-close">Rút lại</button>
+        <button id="btn-close" class="btn" style="font-size: 1rem; padding: 10px 20px;">Rút quẻ khác</button>
     </div>
+
+    <audio id="sfx-shake" src="https://www.soundjay.com/misc/sounds/wooden-clatter-1.mp3" preload="auto"></audio>
 
     <script>
         const loiChucs = [
@@ -126,43 +132,54 @@
         const ketQua = document.getElementById('ket-qua');
         const txtLoiChuc = document.getElementById('loi-chuc');
         const btnClose = document.getElementById('btn-close');
+        const sfxShake = document.getElementById('sfx-shake');
 
         let isShaking = false;
+        let lastX = 0, lastY = 0, lastZ = 0;
 
+        // Xử lý khi nhấn nút bắt đầu (Yêu cầu quyền trên iOS)
         startBtn.onclick = function() {
-            if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission().then(state => {
-                    if (state === 'granted') startAction();
-                });
+            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(state => {
+                        if (state === 'granted') initSensor();
+                    })
+                    .catch(console.error);
             } else {
-                startAction();
+                initSensor();
             }
+            startBtn.style.display = 'none';
         };
 
-        function startAction() {
-            startBtn.style.display = 'none';
-            initSensor();
-            alert("Sẵn sàng! Hãy cầm chắc điện thoại và LẮC nhé!");
+        // Hàm thực hiện hành động lắc
+        function performShake() {
+            if (isShaking) return;
+            isShaking = true;
+            
+            // Chạy âm thanh và rung
+            sfxShake.currentTime = 0;
+            sfxShake.play();
+            ongQue.classList.add('shaking');
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+            setTimeout(() => {
+                ongQue.classList.remove('shaking');
+                showResult();
+            }, 1200);
         }
 
+        // Click chuột (Dành cho PC hoặc khi không muốn lắc)
+        document.getElementById('container').onclick = performShake;
+
         function initSensor() {
-            let lastX, lastY, lastZ;
-            let threshold = 18; 
-
+            let threshold = 15; 
             window.addEventListener('devicemotion', (e) => {
-                if (isShaking) return;
                 let acc = e.accelerationIncludingGravity;
-                let diff = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ);
-                
-                if (diff > threshold) {
-                    isShaking = true;
-                    ongQue.classList.add('shaking');
-                    if(navigator.vibrate) navigator.vibrate(300);
+                if (!acc.x) return;
 
-                    setTimeout(() => {
-                        ongQue.classList.remove('shaking');
-                        showResult();
-                    }, 1200);
+                let diff = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ);
+                if (diff > threshold) {
+                    performShake();
                 }
                 lastX = acc.x; lastY = acc.y; lastZ = acc.z;
             });
@@ -172,6 +189,21 @@
             const randomMsg = loiChucs[Math.floor(Math.random() * loiChucs.length)];
             txtLoiChuc.innerText = randomMsg;
             ketQua.style.display = 'block';
+            createFireworks();
+        }
+
+        function createFireworks() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const fw = document.createElement('div');
+                    fw.className = 'firework';
+                    fw.style.left = Math.random() * 100 + 'vw';
+                    fw.style.top = Math.random() * 100 + 'vh';
+                    fw.style.backgroundColor = ['#ffd700', '#ff4444', '#ffffff', '#ffeb3b'][Math.floor(Math.random() * 4)];
+                    document.body.appendChild(fw);
+                    setTimeout(() => fw.remove(), 1000);
+                }, i * 100);
+            }
         }
 
         btnClose.onclick = () => {
