@@ -3,54 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lắc Quẻ Linh Ứng - Xuân Bính Ngọ 2026</title>
+    <title>Gieo Quẻ Đầu Xuân 2026</title>
     <style>
         :root { 
-            --gold: #ffd700; 
-            --red: #d40000; 
-            --paper: #fffdf0; 
+            --gold-bright: #ffed8a; 
+            --gold-dark: #d4af37;
+            --red-royal: #8b0000; 
+            --bg-paper: #fffcf0; /* Màu giấy xuyến chỉ sang trọng */
         }
 
         body {
             margin: 0; 
-            /* Hình nền bạn cung cấp */
             background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6492.JPG?raw=true') no-repeat center center fixed;
             background-size: cover;
             height: 100vh; 
             display: flex; 
-            flex-direction: column;
             align-items: center; 
             justify-content: center; 
             overflow: hidden;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif; /* Font chữ có chân cổ điển */
         }
 
-        /* Lớp phủ tối nhẹ để nổi bật ống quẻ */
         body::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 0;
         }
 
-        h1 {
-            position: relative;
-            z-index: 1;
-            color: var(--gold);
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-            margin-top: 0;
-            font-size: 2rem;
-            text-align: center;
-        }
-
-        /* 1. Cấu trúc ống quẻ TO và TRUNG TÂM */
+        /* 1. Ống quẻ trung tâm */
         #container {
             position: relative; 
             z-index: 2;
-            width: 250px; /* Tăng kích thước ống quẻ */
-            height: 400px;
-            perspective: 1000px; 
+            width: 260px; 
+            height: 420px;
+            perspective: 1200px; 
             cursor: pointer;
             display: flex;
             align-items: flex-end;
@@ -65,109 +53,115 @@
             pointer-events: none;
         }
 
-        #cup-back { z-index: 1; filter: brightness(0.5); transform: scale(0.96); }
-        
+        #cup-back { z-index: 1; filter: brightness(0.5); transform: scale(0.97); }
         #sticks {  
             z-index: 2; 
-            bottom: 100px; /* Điều chỉnh vị trí quẻ trong ống */
+            bottom: 110px; 
             width: 55%; 
             transition: transform 0.1s; 
         }
-
         #cup-front { 
             z-index: 3; 
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.7));
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
         }
 
-        /* 2. Cây quẻ chính bay ra */
+        /* 2. Cây quẻ đơn */
         #single-stick {
             position: fixed; 
-            width: 60px; 
+            width: 65px; 
             z-index: 100; 
             display: none;
             left: 50%; 
             top: 50%; 
             transform: translate(-50%, -50%);
-            filter: drop-shadow(0 5px 20px rgba(0,0,0,0.6));
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.7));
         }
 
-        /* 3. 4 Quẻ phụ trang trí xung quanh */
+        /* 3. Trang trí xung quanh */
         .decor-stick {
             position: absolute;
-            width: 40px;
-            opacity: 0.6;
+            width: 45px;
+            opacity: 0.4;
             z-index: 1;
-            filter: blur(1px);
+            filter: blur(1.5px);
         }
 
         /* Animation lắc */
         .shaking #cup-front, .shaking #cup-back { animation: shake-cup 0.1s infinite alternate; }
         .shaking #sticks { animation: shake-sticks 0.08s infinite alternate; }
 
-        @keyframes shake-cup {
-            0% { transform: rotate(4deg); }
-            100% { transform: rotate(-4deg); }
-        }
+        @keyframes shake-cup { 0% { transform: rotate(3deg); } 100% { transform: rotate(-3deg); } }
+        @keyframes shake-sticks { 0% { transform: translateY(0); } 100% { transform: translateY(-55px) rotate(4deg); } }
 
-        @keyframes shake-sticks {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50px) rotate(5deg); }
-        }
-
-        /* 4. Bảng kết quả */
+        /* 4. Ô vuông kết quả (Canvas sang trọng) */
         #ket-qua {
             display: none; 
             position: fixed; 
             top: 50%; 
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
-            background: var(--paper); 
-            color: #800000; 
-            padding: 30px;
-            border-radius: 15px; 
-            border: 5px double #b30000;
+            background: var(--bg-paper); 
+            color: var(--red-royal); 
+            padding: 40px 30px;
+            border-radius: 4px; /* Viền hơi vuông cho phong cách cổ điển */
+            border: 2px solid var(--gold-dark);
+            outline: 8px double var(--red-royal); /* Viền kép sang trọng */
+            outline-offset: -15px;
             z-index: 200; 
-            width: 300px; 
+            width: 320px; 
             text-align: center;
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 150px rgba(0,0,0,0.9);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         #ket-qua.show { display: block; transform: translate(-50%, -50%) scale(1); }
 
-        .btn {
-            background: var(--red); 
-            color: var(--gold);
-            border: 2px solid var(--gold); 
-            padding: 12px 30px; 
-            border-radius: 30px;
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 20px;
-            font-size: 1rem;
-            position: relative;
-            z-index: 5;
+        #loi-chuc {
+            font-family: 'Segoe UI Historic', 'Georgia', serif; /* Font cổ truyền */
+            font-size: 1.4rem; 
+            min-height: 90px; 
+            padding: 20px 10px; 
+            line-height: 1.8;
+            font-weight: bold;
+            letter-spacing: 1px;
+            white-space: pre-line;
         }
 
+        .btn {
+            background: var(--red-royal); 
+            color: var(--gold-bright);
+            border: 1px solid var(--gold-dark); 
+            padding: 14px 35px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 25px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .btn:hover { background: #b30000; letter-spacing: 3px; }
+
         .instruction {
-            position: relative;
-            z-index: 1;
-            color: white;
-            margin-top: 20px;
-            background: rgba(0,0,0,0.5);
-            padding: 5px 15px;
-            border-radius: 20px;
+            position: fixed;
+            bottom: 30px;
+            color: var(--gold-bright);
+            background: rgba(139, 0, 0, 0.6);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            z-index: 5;
         }
     </style>
 </head>
 <body>
 
-    <h1>🧧 XIN QUẺ LINH ỨNG 2026 🧧</h1>
-
-    <img class="decor-stick" style="top:10%; left:10%; transform:rotate(-15deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
-    <img class="decor-stick" style="top:15%; right:10%; transform:rotate(20deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
-    <img class="decor-stick" style="bottom:10%; left:15%; transform:rotate(10deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
-    <img class="decor-stick" style="bottom:20%; right:15%; transform:rotate(-25deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
+    <img class="decor-stick" style="top:5%; left:5%; transform:rotate(-20deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
+    <img class="decor-stick" style="top:10%; right:5%; transform:rotate(25deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
+    <img class="decor-stick" style="bottom:5%; left:10%; transform:rotate(15deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
+    <img class="decor-stick" style="bottom:15%; right:8%; transform:rotate(-30deg)" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
 
     <div id="container">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
@@ -177,25 +171,26 @@
 
     <img id="single-stick" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
 
-    <div class="instruction">Chạm ống quẻ hoặc lắc máy để xin lộc</div>
-    <button id="start-btn" class="btn">KHAI XUÂN ĐÓN LỘC</button>
+    <div class="instruction">Lắc máy hoặc chạm vào ống để gieo quẻ</div>
+    <button id="start-btn" class="btn" style="position: absolute; bottom: 80px;">BẮT ĐẦU</button>
 
     <div id="ket-qua">
-        <h2 style="margin-top:0; border-bottom: 2px solid var(--red); padding-bottom: 10px;">✨ LỜI QUẺ ✨</h2>
-        <div id="loi-chuc" style="font-size: 1.3rem; min-height: 80px; padding: 15px 0; line-height: 1.5;"></div>
-        <button class="btn" onclick="reset()">TẠ LỄ & XIN LẠI</button>
+        <div style="font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 5px; opacity: 0.7;">BÍNH NGỌ 2026</div>
+        <h2 style="margin-top:0; border-bottom: 1px solid var(--gold-dark); padding-bottom: 10px; font-style: italic;">Phúc Lộc Linh Ứng</h2>
+        <div id="loi-chuc"></div>
+        <button class="btn" onclick="reset()">Tạ Lễ</button>
     </div>
 
     <audio id="sfx" src="https://www.soundjay.com/misc/sounds/wooden-clatter-1.mp3"></audio>
 
     <script>
         const loiChucs = [
-            "🧧 Tiền vô như nước sông Đà\nTiền ra nhỏ giọt như cà phê phin",
-            "🌸 Vạn sự như ý\nĐắc lộc toàn gia",
-            "💰 Sức khỏe vô biên\nKiếm được nhiều tiền",
-            "✨ Tình duyên phơi phới\nHạnh phúc ngập trời",
-            "🐎 Mã đáo thành công\nVạn sự hanh thông",
-            "🍀 Cầu được ước thấy\nQuý nhân phù trợ"
+            "Mã Đáo Thành Công\nVạn Sự Hanh Thông",
+            "Tiền Vô Như Nước\nPhúc Lộc Đầy Nhà",
+            "Sức Khỏe Dồi Dào\nAn Khang Thịnh Vượng",
+            "Tình Duyên Viên Mãn\nHạnh Phúc Vững Bền",
+            "Công Thành Danh Toại\nSự Nghiệp Thăng Hoa",
+            "Ngũ Phúc Lâm Môn\nPhú Quý Cát Tường"
         ];
 
         let isShaking = false;
@@ -220,11 +215,11 @@
         function launchStick() {
             singleStick.style.display = 'block';
             const anim = singleStick.animate([
-                { transform: 'translate(-50%, 100%) scale(0.3) rotate(0deg)', opacity: 0 },
-                { transform: 'translate(-50%, -50%) scale(1.5) rotate(1080deg)', opacity: 1 }
+                { transform: 'translate(-50%, 80%) scale(0.4) rotate(0deg)', opacity: 0 },
+                { transform: 'translate(-50%, -50%) scale(1.6) rotate(1080deg)', opacity: 1 }
             ], { 
-                duration: 1200, 
-                easing: 'cubic-bezier(0.17, 0.67, 0.83, 0.67)',
+                duration: 1300, 
+                easing: 'cubic-bezier(0.19, 1, 0.22, 1)',
                 fill: 'forwards'
             });
 
@@ -243,7 +238,7 @@
 
         function reset() {
             ketQua.classList.remove('show');
-            setTimeout(() => { isShaking = false; }, 500);
+            setTimeout(() => { isShaking = false; }, 600);
         }
 
         container.onclick = startShake;
@@ -261,7 +256,7 @@
                 let a = e.accelerationIncludingGravity;
                 if(!a) return;
                 let total = Math.abs(a.x + a.y + a.z);
-                if (Math.abs(total - lastA) > 20) startShake();
+                if (Math.abs(total - lastA) > 22) startShake();
                 lastA = total;
             });
         }
