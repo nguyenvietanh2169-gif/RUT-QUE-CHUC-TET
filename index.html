@@ -51,7 +51,7 @@
             bottom: 225px; 
             left: 38%; 
             transform: translateX(-50%);
-            width: 80px; 
+            width: 60px; /* Thu hẹp độ rộng bundle để quẻ chụm hơn */
             height: 200px;
             z-index: 3;
         }
@@ -65,31 +65,27 @@
             transform: rotate(var(--r));
         }
 
-        /* HIỆU ỨNG LẮC LOẠN XẠ (HẾT ĐƠ) */
+        /* HIỆU ỨNG LẮC CHẬM VÀ GỌN (HẾT LỘ KHỎI ỐNG) */
         .shaking .stick-item {
             animation: messy-shake var(--t) infinite ease-in-out alternate;
         }
 
         @keyframes messy-shake {
             0% { 
-                transform: rotate(calc(var(--r) - 6deg)) translateY(0px) translateX(-2px); 
+                transform: rotate(calc(var(--r) - 3deg)) translateY(0px) translateX(-1px); 
             }
             50% { 
-                transform: rotate(calc(var(--r) + 8deg)) translateY(-15px) translateX(3px); 
+                transform: rotate(calc(var(--r) + 4deg)) translateY(-10px) translateX(1.5px); 
             }
             100% { 
-                transform: rotate(calc(var(--r) - 4deg)) translateY(-5px) translateX(-1px); 
+                transform: rotate(calc(var(--r) - 2deg)) translateY(-3px) translateX(-0.5px); 
             }
         }
 
-        /* Rung cả ống quẻ */
-        .shaking-cup { animation: cup-vibrate 0.15s infinite; }
+        .shaking-cup { animation: cup-vibrate 0.2s infinite; } /* Làm chậm nhịp rung ống */
         @keyframes cup-vibrate {
             0% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-2px, 0px) rotate(-2deg); }
-            40% { transform: translate(2px, -1px) rotate(2deg); }
-            60% { transform: translate(-1px, 2px) rotate(-1deg); }
-            80% { transform: translate(1px, -2px) rotate(1deg); }
+            50% { transform: translate(-1.5px, 0px) rotate(-1deg); }
             100% { transform: translate(1px, 1px) rotate(0deg); }
         }
 
@@ -162,13 +158,13 @@
     <div id="container" onclick="requestPermission()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         <div class="sticks-bundle">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -12deg; --t: 0.2s; left: 0%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -6deg; --t: 0.35s; left: 10%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; --t: 0.25s; left: 25%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 8deg; --t: 0.4s; left: 40%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 15deg; --t: 0.3s; left: 55%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -4deg; --t: 0.22s; left: 15%; z-index: 4; margin-bottom: -5px;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 5deg; --t: 0.31s; left: 35%; z-index: 4; margin-bottom: -5px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -7deg; --t: 0.5s; left: 0%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -3deg; --t: 0.75s; left: 10%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; --t: 0.6s; left: 25%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 4deg; --t: 0.8s; left: 40%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 7deg; --t: 0.7s; left: 55%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -2deg; --t: 0.55s; left: 15%; z-index: 4; margin-bottom: -5px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 3deg; --t: 0.65s; left: 35%; z-index: 4; margin-bottom: -5px;">
         </div>
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
@@ -184,6 +180,7 @@
     </div>
 
     <script>
+        // ... (Toàn bộ phần Script giữ nguyên như code cũ của bạn vì logic đã chạy tốt)
         const wishes = [
             "Ăn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
             "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên\nKhông có gì phiền",
