@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gieo Quẻ Đầu Xuân 2026 - Bính Ngọ</title>
+    <title>Thư Pháp Đầu Xuân 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --gold-bright: #ffed8a; 
-            --gold-dark: #d4af37;
-            --red-royal: #8b0000; 
-            --bg-paper: #fffcf0;
+        :root {
+            --paper: #fdf5e6;
+            --ink: #8b0000;
+            --wood: #5d4037;
         }
 
         body {
-            margin: 0; 
+            margin: 0;
             background: #222 url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6492.JPG?raw=true') no-repeat center center fixed;
             background-size: cover;
-            height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
-            font-family: 'Times New Roman', Times, serif;
         }
 
+        /* Lớp phủ tối cho nền */
         body::before {
             content: "";
             position: absolute;
@@ -32,240 +34,156 @@
             z-index: 0;
         }
 
-        /* 1. Ống quẻ */
-        #container {
-            position: relative; 
-            z-index: 2;
-            width: 240px; 
-            height: 380px;
-            cursor: pointer;
+        /* Container của cuộn giấy */
+        .scroll-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 300px; /* Chiều ngang khi chưa mở */
+            height: 400px;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
-            transition: transform 0.3s;
+            transition: width 1.5s cubic-bezier(0.42, 0, 0.58, 1);
         }
 
-        .cup-layer { 
-            position: absolute; 
-            width: 100%; 
-            bottom: 0;
-            user-select: none;
-            pointer-events: none;
+        .scroll-wrapper.open {
+            width: 90vw; /* Chiều ngang khi mở ra */
+            max-width: 500px;
         }
 
-        #sticks {  
-            z-index: 2; 
-            bottom: 100px; 
-            width: 50%; 
+        /* Phần giấy hiển thị lời chúc */
+        .scroll-content {
+            position: absolute;
+            width: 0;
+            height: 80%;
+            background: var(--paper);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.1), 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 1.5s cubic-bezier(0.42, 0, 0.58, 1);
+            z-index: 1;
         }
 
-        #cup-front { z-index: 3; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8)); }
-
-        /* 2. Cây quẻ đơn */
-        #single-stick {
-            position: fixed; 
-            width: 60px; 
-            z-index: 100; 
-            display: none;
-            left: 50%; 
-            top: 50%; 
-            transform: translate(-50%, -50%);
+        .scroll-wrapper.open .scroll-content {
+            width: 90%;
+            border: 2px solid var(--ink);
+            outline: 5px double var(--ink);
+            outline-offset: -15px;
         }
 
-        /* Animation */
-        .shaking { animation: shake-wrap 0.1s infinite; }
-        @keyframes shake-wrap {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            50% { transform: translate(-1px, -2px) rotate(-2deg); }
-            100% { transform: translate(1px, 2px) rotate(2deg); }
+        /* Hai thanh cuộn gỗ */
+        .roller {
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(to right, #3e2723, #5d4037, #3e2723);
+            border-radius: 5px;
+            z-index: 2;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+            transition: transform 1.5s cubic-bezier(0.42, 0, 0.58, 1);
         }
 
-        /* 3. Kết quả (Tờ sớ) */
-        #ket-qua {
-            display: none; 
-            position: fixed; 
-            top: 50%; 
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            background: var(--bg-paper); 
-            color: var(--red-royal); 
-            padding: 30px;
-            border: 2px solid var(--gold-dark);
-            outline: 6px double var(--red-royal);
-            outline-offset: -12px;
-            z-index: 200; 
-            width: 85%;
-            max-width: 320px;
+        .roller.left { transform: translateX(0); }
+        .roller.right { transform: translateX(0); }
+
+        .scroll-wrapper.open .roller.left { transform: translateX(-240px); } /* Điều chỉnh theo độ mở */
+        .scroll-wrapper.open .roller.right { transform: translateX(240px); }
+
+        /* Chữ thư pháp */
+        .calligraphy-text {
+            font-family: 'Dancing Script', cursive;
+            color: var(--ink);
+            font-size: 1.8rem;
             text-align: center;
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
-            opacity: 0;
-            transition: all 0.5s ease;
-        }
-
-        #ket-qua.show { display: block; transform: translate(-50%, -50%) scale(1); opacity: 1; }
-
-        #loi-chuc {
-            font-size: 1.4rem; 
-            padding: 20px 0; 
-            line-height: 1.6;
-            font-weight: bold;
             white-space: pre-line;
-            border-bottom: 1px dashed var(--gold-dark);
-            margin-bottom: 15px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s 1s, transform 1s 1s; /* Hiện ra sau khi mở xong */
         }
 
+        .scroll-wrapper.open .calligraphy-text {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Nút điều khiển */
         .btn {
-            background: var(--red-royal); 
-            color: var(--gold-bright);
-            border: 1px solid var(--gold-dark); 
-            padding: 12px 25px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            font-size: 0.9rem;
+            position: relative;
+            z-index: 20;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #8b0000;
+            color: #ffed8a;
+            border: 2px solid #d4af37;
+            cursor: pointer;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 5px;
+            letter-spacing: 2px;
+            border-radius: 5px;
         }
 
         .instruction {
-            position: fixed;
-            bottom: 40px;
-            color: var(--gold-bright);
-            background: rgba(139, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            z-index: 5;
-            text-align: center;
+            color: #ffed8a;
+            z-index: 10;
+            margin-bottom: 10px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
-    <div id="container">
-        <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true" style="filter: brightness(0.6)">
-        <img id="sticks" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
-        <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
+    <div class="instruction">Chạm vào để khai xuân</div>
+
+    <div class="scroll-wrapper" id="scrollBox" onclick="toggleScroll()">
+        <div class="roller left" id="leftRoller"></div>
+        
+        <div class="scroll-content">
+            <div class="calligraphy-text" id="wishText">
+                Cung Chúc Tân Xuân
+                Vạn Sự Như Ý
+                Bính Ngọ 2026
+            </div>
+        </div>
+
+        <div class="roller right" id="rightRoller"></div>
     </div>
 
-    <img id="single-stick" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
-
-    <div class="instruction">Chạm vào ống quẻ hoặc lắc máy để xin lộc</div>
-    
-    <button id="start-btn" class="btn" style="position: absolute; bottom: 100px; z-index: 10;">KHỞI TÂM XIN QUẺ</button>
-
-    <div id="ket-qua">
-        <div style="font-size: 0.7rem; letter-spacing: 3px; margin-bottom: 5px;">XUÂN BÍNH NGỌ 2026</div>
-        <h2 style="margin:0; font-style: italic; font-size: 1.2rem;">Linh Quẻ Đắc Lộc</h2>
-        <div id="loi-chuc"></div>
-        <button class="btn" onclick="shareResult()">Chia Sẻ</button>
-        <button class="btn" style="background:transparent; color: var(--red-royal)" onclick="reset()">Tạ Lễ</button>
-    </div>
-
-    <audio id="sfx" src="https://www.soundjay.com/misc/sounds/wooden-clatter-1.mp3"></audio>
+    <button class="btn" onclick="randomWish()">XIN CHỮ MỚI</button>
 
     <script>
-        const loiChucs = [
+        const wishes = [
             "Mã Đáo Thành Công\nVạn Sự Hanh Thông",
-            "Tiền Vô Như Nước\nPhúc Lộc Đầy Nhà",
-            "Sức Khỏe Dồi Dào\nAn Khang Thịnh Vượng",
-            "Tình Duyên Viên Mãn\nHạnh Phúc Vững Bền",
+            "Phúc Lộc Thọ Toàn\nGia Đạo Bình An",
+            "Tân Xuân Đại Cát\nPhú Quý Vinh Hoa",
             "Công Thành Danh Toại\nSự Nghiệp Thăng Hoa",
-            "Ngũ Phúc Lâm Môn\nPhú Quý Cát Tường",
-            "Vạn Kỳ Như Ý\nĐắc Lộc Toàn Gia",
-            "Thân Tâm An Lạc\nTrí Tuệ Minh Mẫn",
-            "Kinh Doanh Phát Đạt\nVạn Thuận Tương Sinh",
-            "Gia Hòa Vạn Sự Hưng\nHạnh Phúc Mãi Bền Lâu"
+            "An Khang Thịnh Vượng\nVạn Kỳ Như Ý",
+            "Trí Tuệ Minh Mẫn\nThân Tâm An Lạc"
         ];
 
-        let isShaking = false;
-        const container = document.getElementById('container');
-        const singleStick = document.getElementById('single-stick');
-        const ketQua = document.getElementById('ket-qua');
-        const sfx = document.getElementById('sfx');
-        const startBtn = document.getElementById('start-btn');
+        const scrollBox = document.getElementById('scrollBox');
+        const wishText = document.getElementById('wishText');
 
-        function startShake() {
-            if (isShaking) return;
-            isShaking = true;
-            
-            // Âm thanh lắc
-            sfx.currentTime = 0;
-            sfx.play().catch(e => console.log("Audio play blocked"));
-            
-            container.classList.add('shaking');
+        function toggleScroll() {
+            scrollBox.classList.toggle('open');
+        }
 
+        function randomWish() {
+            // Đóng cuộn lại trước khi đổi chữ để tạo hiệu ứng bất ngờ
+            scrollBox.classList.remove('open');
+            
             setTimeout(() => {
-                container.classList.remove('shaking');
-                launchStick();
-            }, 1500);
+                const random = wishes[Math.floor(Math.random() * wishes.length)];
+                wishText.innerText = random + "\nBính Ngọ 2026";
+                scrollBox.classList.add('open');
+            }, 800);
         }
 
-        function launchStick() {
-            singleStick.style.display = 'block';
-            const anim = singleStick.animate([
-                { transform: 'translate(-50%, 100%) scale(0.5) rotate(0deg)', opacity: 0 },
-                { transform: 'translate(-50%, -150%) scale(1.5) rotate(720deg)', opacity: 1 },
-                { transform: 'translate(-50%, -50%) scale(1.2) rotate(1080deg)', opacity: 1 }
-            ], { 
-                duration: 1000, 
-                easing: 'ease-out',
-                fill: 'forwards'
-            });
-
-            anim.onfinish = () => {
-                setTimeout(() => {
-                    singleStick.style.display = 'none';
-                    showFinalResult();
-                }, 800);
-            };
-        }
-
-        function showFinalResult() {
-            const randomLuck = loiChucs[Math.floor(Math.random() * loiChucs.length)];
-            document.getElementById('loi-chuc').innerText = randomLuck;
-            ketQua.classList.add('show');
-        }
-
-        function reset() {
-            ketQua.classList.remove('show');
-            setTimeout(() => { isShaking = false; }, 500);
-        }
-
-        function shareResult() {
-            const text = "Tôi vừa gieo được quẻ: " + document.getElementById('loi-chuc').innerText.replace('\n', ' - ') + ". Chúc mừng năm mới 2026!";
-            if (navigator.share) {
-                navigator.share({ title: 'Gieo Quẻ Đầu Xuân', text: text, url: window.location.href });
-            } else {
-                alert("Bạn hãy chụp màn hình để chia sẻ quẻ này nhé!");
-            }
-        }
-
-        // Kích hoạt cảm biến và âm thanh
-        startBtn.onclick = () => {
-            startBtn.style.display = 'none';
-            // Cần tương tác người dùng để phát audio sau này
-            sfx.play().then(() => { sfx.pause(); }); 
-            
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission().then(res => { if(res === 'granted') initAcc(); });
-            } else {
-                initAcc();
-            }
-        };
-
-        container.onclick = startShake;
-
-        function initAcc() {
-            let lastA = 0;
-            window.addEventListener('devicemotion', (e) => {
-                let a = e.accelerationIncludingGravity;
-                if(!a) return;
-                let total = Math.abs(a.x + a.y + a.z);
-                if (Math.abs(total - lastA) > 25) startShake();
-                lastA = total;
-            });
-        }
+        // Tự động mở lần đầu sau 1 giây
+        setTimeout(() => {
+            scrollBox.classList.add('open');
+        }, 1000);
     </script>
 </body>
 </html>
