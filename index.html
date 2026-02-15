@@ -66,7 +66,7 @@
             transform-origin: bottom center;
         }
 
-        /* CHỈNH LẠI HIỆU ỨNG LẮC GỌN TRONG ỐNG */
+        /* HIỆU ỨNG LẮC CỰC NHỎ ĐỂ KHÔNG LỘ */
         .shaking .stick-item { 
             animation: messy-shake 0.4s infinite alternate; 
         }
@@ -78,16 +78,20 @@
         .stick-item:nth-child(5) { animation-delay: 0.2s; }
 
         @keyframes messy-shake {
-            /* Giảm translateX xuống còn khoảng 5px để không bị lộ ra ngoài ống */
-            0% { transform: translateX(-5px) rotate(calc(var(--r) - 2deg)); }
-            25% { transform: translateX(4px) rotate(calc(var(--r) + 2deg)); }
-            50% { transform: translateX(-3px) rotate(calc(var(--r) - 1deg)); }
-            75% { transform: translateX(5px) rotate(calc(var(--r) + 3deg)); }
-            100% { transform: translateX(-4px) rotate(calc(var(--r) - 2deg)); }
+            /* Giảm translateX xuống tối đa 2px và 3px */
+            0% { transform: translateX(-2px) rotate(calc(var(--r) - 1deg)); }
+            25% { transform: translateX(2px) rotate(calc(var(--r) + 1deg)); }
+            50% { transform: translateX(-1px) rotate(calc(var(--r) - 0.5deg)); }
+            75% { transform: translateX(3px) rotate(calc(var(--r) + 1.5deg)); }
+            100% { transform: translateX(-2px) rotate(calc(var(--r) - 1deg)); }
         }
 
+        /* Giảm thêm độ rung của ống quẻ để đồng bộ với quẻ bên trong */
         .shaking-cup { animation: cup-vibrate 0.2s infinite alternate; }
-        @keyframes cup-vibrate { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+        @keyframes cup-vibrate { 
+            from { transform: rotate(-1.5deg); } 
+            to { transform: rotate(1.5deg); } 
+        }
 
         /* LIỄN ĐỎ */
         #scroll-overlay {
@@ -132,7 +136,7 @@
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            padding-top: 350px; 
+            padding-top: 300px; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             transition: opacity 0.8s 1.2s;
         }
