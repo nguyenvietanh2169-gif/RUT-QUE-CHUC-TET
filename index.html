@@ -66,36 +66,22 @@
             transform-origin: bottom center;
         }
 
-        /* HIỆU ỨNG LẮC CỰC NHỎ ĐỂ KHÔNG LỘ */
-        .shaking .stick-item { 
-            animation: messy-shake 0.4s infinite alternate; 
-        }
-
-        .stick-item:nth-child(1) { animation-delay: 0.1s; }
-        .stick-item:nth-child(2) { animation-delay: 0.25s; }
-        .stick-item:nth-child(3) { animation-delay: 0.15s; }
-        .stick-item:nth-child(4) { animation-delay: 0.3s; }
-        .stick-item:nth-child(5) { animation-delay: 0.2s; }
-
+        /* LẮC NHẸ KHÔNG LỘ QUẺ */
+        .shaking .stick-item { animation: messy-shake 0.4s infinite alternate; }
         @keyframes messy-shake {
             0% { transform: translateX(-2px) rotate(calc(var(--r) - 1deg)); }
-            25% { transform: translateX(2px) rotate(calc(var(--r) + 1deg)); }
-            50% { transform: translateX(-1px) rotate(calc(var(--r) - 0.5deg)); }
-            75% { transform: translateX(3px) rotate(calc(var(--r) + 1.5deg)); }
+            50% { transform: translateX(2px) rotate(calc(var(--r) + 1deg)); }
             100% { transform: translateX(-2px) rotate(calc(var(--r) - 1deg)); }
         }
 
         .shaking-cup { animation: cup-vibrate 0.2s infinite alternate; }
-        @keyframes cup-vibrate { 
-            from { transform: rotate(-1.5deg); } 
-            to { transform: rotate(1.5deg); } 
-        }
+        @keyframes cup-vibrate { from { transform: rotate(-1.5deg); } to { transform: rotate(1.5deg); } }
 
-        /* LIỄN ĐỎ VỚI ẢNH NỀN MỚI */
+        /* LIỄN ĐỎ */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.85);
             display: none;
             z-index: 100;
             justify-content: center;
@@ -108,8 +94,9 @@
             max-width: 500px;
             height: 0;
             overflow: hidden;
-            transition: height 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
             box-shadow: 0 0 60px rgba(0,0,0,0.8);
+            will-change: height; /* Tối ưu chống lag */
         }
 
         .lien-bg {
@@ -117,7 +104,6 @@
             top: 0; left: 0;
             width: 100%;
             height: 90vh;
-            /* CẬP NHẬT ẢNH NỀN MỚI TẠI ĐÂY */
             background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/background%20loi%20chuc.png?raw=true') no-repeat center top;
             background-size: 100% 100%;
         }
@@ -131,13 +117,13 @@
             background: linear-gradient(to bottom, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            padding-top: 300px; 
+            padding-top: 280px; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            transition: opacity 0.8s 1.2s;
+            transition: opacity 0.8s 1s;
         }
         .open .wish-text { opacity: 1; }
 
@@ -202,41 +188,37 @@
         let active = false;
         const canvas = document.getElementById('fireworks-canvas');
         const ctx = canvas.getContext('2d');
+        let fireworks = [];
         let particles = [];
 
         function startGieo() {
             if (active) return;
             active = true;
             document.getElementById('btnAction').style.visibility = 'hidden';
-            
             const soundLacQue = document.getElementById('lacQueSound');
             soundLacQue.currentTime = 0;
             soundLacQue.play().catch(()=>{});
 
-            const container = document.getElementById('container');
-            container.classList.add('shaking', 'shaking-cup');
-
+            document.getElementById('container').classList.add('shaking', 'shaking-cup');
             setTimeout(() => {
-                container.classList.remove('shaking', 'shaking-cup');
+                document.getElementById('container').classList.remove('shaking', 'shaking-cup');
                 openScroll();
             }, 1800);
         }
 
         function openScroll() {
             const music = document.getElementById('bgMusic');
-            music.currentTime = 0; 
-            music.volume = 0.6;
+            music.currentTime = 0; music.volume = 0.6;
             music.play().catch(()=>{});
 
-            const random = wishes[Math.floor(Math.random() * wishes.length)];
-            document.getElementById('wishDisplay').innerText = random;
+            document.getElementById('wishDisplay').innerText = wishes[Math.floor(Math.random() * wishes.length)];
             document.getElementById('scroll-overlay').style.display = 'flex';
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
             setTimeout(() => {
                 document.getElementById('lienWrapper').classList.add('open');
-                animateFireworks();
+                animate();
             }, 100);
         }
 
@@ -248,32 +230,85 @@
                 document.getElementById('scroll-overlay').style.display = 'none';
                 document.getElementById('btnAction').style.visibility = 'visible';
                 active = false;
-                particles = [];
+                fireworks = []; particles = [];
             }, 800);
         }
 
-        function createParticle(x, y) {
-            const colors = ['#FFD700', '#FF4500', '#FF69B4', '#00FFFF', '#ADFF2F'];
-            for (let i = 0; i < 20; i++) {
-                particles.push({
-                    x, y, vx: (Math.random() - 0.5) * 10, vy: (Math.random() - 0.5) * 10,
-                    alpha: 1, color: colors[Math.floor(Math.random() * colors.length)]
-                });
+        // LOGIC PHÁO HOA (MƯỢT HƠN PHÁO GIẤY)
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetY = Math.random() * (canvas.height / 2);
+                this.speed = 8 + Math.random() * 5;
+                this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y <= this.targetY) {
+                    this.explode();
+                    return false;
+                }
+                return true;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            explode() {
+                for (let i = 0; i < 30; i++) {
+                    particles.push(new Particle(this.x, this.y, this.color));
+                }
             }
         }
 
-        function animateFireworks() {
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y;
+                this.color = color;
+                this.angle = Math.random() * Math.PI * 2;
+                this.velocity = Math.random() * 6 + 2;
+                this.friction = 0.95;
+                this.gravity = 0.15;
+                this.alpha = 1;
+            }
+            update() {
+                this.velocity *= this.friction;
+                this.x += Math.cos(this.angle) * this.velocity;
+                this.y += Math.sin(this.angle) * this.velocity + this.gravity;
+                this.alpha -= 0.02;
+                return this.alpha > 0;
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
             if (!active) return;
-            if (Math.random() < 0.05) createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Tạo bóng mờ cho đuôi pháo
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, i) => {
-                p.x += p.vx; p.y += p.vy; p.alpha -= 0.012;
-                ctx.globalAlpha = p.alpha;
-                ctx.fillStyle = p.color;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
-                if (p.alpha <= 0) particles.splice(i, 1);
+            
+            if (Math.random() < 0.04) fireworks.push(new Firework());
+
+            fireworks = fireworks.filter(f => {
+                if (f.update()) { f.draw(); return true; }
+                return false;
             });
-            requestAnimationFrame(animateFireworks);
+
+            particles = particles.filter(p => {
+                if (p.update()) { p.draw(); return true; }
+                return false;
+            });
+            
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(animate);
         }
     </script>
 </body>
