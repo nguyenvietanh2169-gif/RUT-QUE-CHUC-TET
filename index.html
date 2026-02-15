@@ -31,7 +31,7 @@
             z-index: 0;
         }
 
-        /* ỐNG QUẺ - KHÔI PHỤC LOGIC LẮC NGẪU NHIÊN */
+        /* ỐNG QUẺ */
         #container {
             position: relative;
             width: 320px;
@@ -51,11 +51,9 @@
             bottom: 225px; 
             left: 38%; 
             transform: translateX(-50%);
-            width: 66px; 
+            width: 80px; 
             height: 200px;
             z-index: 3;
-            display: flex;
-            justify-content: center;
         }
 
         .stick-item {
@@ -64,18 +62,36 @@
             filter: brightness(0.85) contrast(1.1);
             bottom: 0;
             transform-origin: bottom center;
+            transform: rotate(var(--r));
         }
 
-        /* LẮC NGẪU NHIÊN KIỂU CŨ */
-        .shaking .stick-item { animation: messy-shake 0.4s infinite alternate; }
+        /* HIỆU ỨNG LẮC LOẠN XẠ (HẾT ĐƠ) */
+        .shaking .stick-item {
+            animation: messy-shake var(--t) infinite ease-in-out alternate;
+        }
+
         @keyframes messy-shake {
-            0% { transform: translateX(-2px) rotate(calc(var(--r) - 1.5deg)); }
-            50% { transform: translateX(2px) rotate(calc(var(--r) + 1.5deg)); }
-            100% { transform: translateX(-2px) rotate(calc(var(--r) - 1.5deg)); }
+            0% { 
+                transform: rotate(calc(var(--r) - 6deg)) translateY(0px) translateX(-2px); 
+            }
+            50% { 
+                transform: rotate(calc(var(--r) + 8deg)) translateY(-15px) translateX(3px); 
+            }
+            100% { 
+                transform: rotate(calc(var(--r) - 4deg)) translateY(-5px) translateX(-1px); 
+            }
         }
 
-        .shaking-cup { animation: cup-vibrate 0.2s infinite alternate; }
-        @keyframes cup-vibrate { from { transform: rotate(-1.5deg); } to { transform: rotate(1.5deg); } }
+        /* Rung cả ống quẻ */
+        .shaking-cup { animation: cup-vibrate 0.15s infinite; }
+        @keyframes cup-vibrate {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-2px, 0px) rotate(-2deg); }
+            40% { transform: translate(2px, -1px) rotate(2deg); }
+            60% { transform: translate(-1px, 2px) rotate(-1deg); }
+            80% { transform: translate(1px, -2px) rotate(1deg); }
+            100% { transform: translate(1px, 1px) rotate(0deg); }
+        }
 
         /* LIỄN ĐỎ */
         #scroll-overlay {
@@ -88,12 +104,9 @@
             align-items: center;
         }
 
-        /* Hiệu ứng lấp lánh nằm dưới liễn */
         #glitter-canvas {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; 
-            pointer-events: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
         }
 
         .lien-wrapper {
@@ -104,15 +117,11 @@
             height: 0;
             overflow: hidden;
             transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-            box-shadow: 0 0 60px rgba(0,0,0,0.8);
         }
 
         .lien-bg {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 90vh;
-            /* CẬP NHẬT ẢNH NỀN MỚI NHẤT */
+            top: 0; left: 0; width: 100%; height: 90vh;
             background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/background%20loi%20chuc%20(1)%20(1).png?raw=true') no-repeat center top;
             background-size: 100% 100%;
         }
@@ -131,7 +140,7 @@
             white-space: pre-line;
             opacity: 0;
             padding-top: 280px; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             transition: opacity 0.8s 1s;
         }
         .open .wish-text { opacity: 1; }
@@ -141,8 +150,7 @@
             margin-top: 30px; padding: 18px 60px;
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
-            cursor: pointer; letter-spacing: 2px;
-            border-radius: 5px;
+            cursor: pointer; letter-spacing: 2px; border-radius: 5px;
         }
     </style>
 </head>
@@ -154,13 +162,13 @@
     <div id="container" onclick="requestPermission()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         <div class="sticks-bundle">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -10deg; left: 0%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -5deg; left: 15%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 2deg; left: 30%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 6deg; left: 45%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 12deg; left: 60%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -3deg; left: 15%; z-index: 4; margin-bottom: -5px;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 4deg; left: 38%; z-index: 4; margin-bottom: -5px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -12deg; --t: 0.2s; left: 0%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -6deg; --t: 0.35s; left: 10%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; --t: 0.25s; left: 25%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 8deg; --t: 0.4s; left: 40%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 15deg; --t: 0.3s; left: 55%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -4deg; --t: 0.22s; left: 15%; z-index: 4; margin-bottom: -5px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 5deg; --t: 0.31s; left: 35%; z-index: 4; margin-bottom: -5px;">
         </div>
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
@@ -179,21 +187,13 @@
         const wishes = [
             "Ăn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
             "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên\nKhông có gì phiền",
-            "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
             "Ăn ngon không mập\nNgủ kỹ không muộn\nMuộn phiền tự tan",
             "Cuộc sống nở hoa\nDrama không có\nVí tiền tự to",
-            "Tâm an thân khỏe\nChẳng chút ưu phiền\nSống vui sống khoẻ\n Như tiên trên đời",
-            "Vàng ròng đầy tủ\nKim cương đầy khay\nLàm chơi ăn thật\nTiền về đầy tay",
-            "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết\nĐau đầu chọn xe",
-            "Thần Tài gõ cửa\nPhú quý vây quanh\nCát tường như ý\nTài lộc tươi xanh",
-            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ\n Không chờ cũng đến",
-            "Sức khỏe dẻo dai\nPhong độ bất bại\nĂn ngon ngủ kĩ\nTinh thần thảnh thơi",
-            "Tâm an thân khỏe\nChẳng chút ưu phiền\nVui vẻ như tiên",
-            "Vàng ròng đầy tủ\nKim cương đầy khay\nLộc về đầy tay",
+            "Tâm an thân khỏe\nSống vui sống khoẻ\nNhư tiên trên đời",
+            "Vàng ròng đầy tủ\nKim cương đầy khay\nTiền về đầy tay",
             "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết",
             "Thần Tài gõ cửa\nPhú quý vây quanh\nTài lộc tươi xanh",
-            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ",
-            "Sức khỏe dẻo dai\nPhong độ bất bại\nTinh thần xanh tươi"
+            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ"
         ];
 
         let active = false;
@@ -214,7 +214,7 @@
             if (active) return;
             let acc = event.accelerationIncludingGravity;
             let speed = Math.abs(acc.x + acc.y + acc.z);
-            if (speed > 25) startGieo(); // Độ nhạy lắc
+            if (speed > 22) startGieo();
         }
 
         function startGieo() {
@@ -254,13 +254,13 @@
         }
 
         function initGlitter() {
-            for(let i=0; i<80; i++) {
+            for(let i=0; i<60; i++) {
                 points.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     size: Math.random() * 2 + 1,
-                    speed: Math.random() * 1.5 + 0.5,
-                    angle: Math.random() * Math.PI * 2
+                    speed: Math.random() * 1 + 0.5,
+                    opacity: Math.random()
                 });
             }
         }
@@ -271,12 +271,9 @@
             ctx.fillStyle = "#FFD700";
             points.forEach(p => {
                 p.y += p.speed;
-                p.x += Math.sin(p.angle + p.y * 0.01) * 0.5;
                 if (p.y > canvas.height) p.y = -10;
                 ctx.globalAlpha = Math.abs(Math.sin(Date.now() * 0.001 + p.x));
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(animateGlitter);
         }
