@@ -96,7 +96,7 @@
             overflow: hidden;
             transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
             box-shadow: 0 0 60px rgba(0,0,0,0.8);
-            will-change: height; /* Tối ưu chống lag */
+            will-change: height;
         }
 
         .lien-bg {
@@ -147,7 +147,7 @@
     <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
     <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
 
-    <div id="container" onclick="startGieo()">
+    <div id="container" onclick="requestPermission()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         <div class="sticks-bundle">
             <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -8deg; left: 0%;">
@@ -161,7 +161,7 @@
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
 
-    <button class="btn-ui" id="btnAction" onclick="startGieo()">TÂM THÀNH Ý NGUYỆN</button>
+    <button class="btn-ui" id="btnAction" onclick="requestPermission()">TÂM THÀNH Ý NGUYỆN</button>
 
     <div id="scroll-overlay" onclick="closeScroll()">
         <canvas id="fireworks-canvas"></canvas>
@@ -183,7 +183,7 @@
             "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết\nĐau đầu chọn xe",
             "Thần Tài gõ cửa\nPhú quý vây quanh\nCát tường như ý\nTài lộc tươi xanh",
             "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ\n Không chờ cũng đến",
-            "Sức khỏe dẻo dai\nPhong độ bất bại\nĂn ngon ngủ kĩ\nTinh thần thảnh thơi"
+            "Sức khỏe dẻo dai\nPhong độ bất bại\nĂn ngon ngủ kĩ\nTinh thần thảnh thơi",
             "Tâm an thân khỏe\nChẳng chút ưu phiền\nVui vẻ như tiên",
             "Vàng ròng đầy tủ\nKim cương đầy khay\nLộc về đầy tay",
             "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết",
@@ -193,10 +193,55 @@
         ];
 
         let active = false;
+        let lastUpdate = 0;
+        let x = 0, y = 0, z = 0, lastX = 0, lastY = 0, lastZ = 0;
+        const SHAKE_THRESHOLD = 15; // Độ nhạy lắc
+
         const canvas = document.getElementById('fireworks-canvas');
         const ctx = canvas.getContext('2d');
         let fireworks = [];
         let particles = [];
+
+        // Yêu cầu quyền cảm biến cho iOS
+        function requestPermission() {
+            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(response => {
+                        if (response == 'granted') {
+                            window.addEventListener('devicemotion', handleMotion);
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                window.addEventListener('devicemotion', handleMotion);
+            }
+            startGieo();
+        }
+
+        function handleMotion(event) {
+            if (active) return;
+            let acceleration = event.accelerationIncludingGravity;
+            let curTime = new Date().getTime();
+            
+            if ((curTime - lastUpdate) > 100) {
+                let diffTime = curTime - lastUpdate;
+                lastUpdate = curTime;
+                
+                x = acceleration.x;
+                y = acceleration.y;
+                z = acceleration.z;
+                
+                let speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
+                
+                if (speed > SHAKE_THRESHOLD * 100) {
+                    startGieo();
+                }
+                
+                lastX = x;
+                lastY = y;
+                lastZ = z;
+            }
+        }
 
         function startGieo() {
             if (active) return;
@@ -241,7 +286,6 @@
             }, 800);
         }
 
-        // LOGIC PHÁO HOA (MƯỢT HƠN PHÁO GIẤY)
         class Firework {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -299,7 +343,7 @@
 
         function animate() {
             if (!active) return;
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Tạo bóng mờ cho đuôi pháo
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             if (Math.random() < 0.04) fireworks.push(new Firework());
