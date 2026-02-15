@@ -27,7 +27,6 @@
             font-family: 'Segoe UI', serif;
         }
 
-        /* Lớp phủ tối nhẹ nhưng không làm mờ ảnh nền */
         body::before {
             content: "";
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -38,61 +37,59 @@
         /* ỐNG QUẺ TRUNG TÂM */
         #container {
             position: relative;
-            width: 280px;
+            width: 320px;
             height: 450px;
             z-index: 10;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            margin-top: -20px;
         }
 
         .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
         #cup-back { z-index: 1; filter: brightness(0.5); }
         #cup-front { z-index: 5; filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8)); }
 
-        /* CÂY QUẺ NỔI TRÊN MIỆNG ỐNG */
+        /* NHÓM 8 CÂY QUẺ TO VÀ ĐẦY ĐẶN */
         .stick-group {
             position: absolute;
-            bottom: 210px; /* Nâng cao lên để lộ đầu quẻ */
-            width: 14%;
+            bottom: 210px; 
+            width: 18%; /* Tăng kích thước quẻ */
             z-index: 3;
-            filter: brightness(0.8);
+            filter: brightness(0.85);
             transition: transform 0.1s;
         }
 
-        /* Animation lắc quẻ nảy cao */
-        .shaking .s1 { animation: shake-s 0.1s infinite alternate; }
-        .shaking .s2 { animation: shake-s 0.08s infinite alternate-reverse; }
-        .shaking .s3 { animation: shake-s 0.12s infinite alternate; animation-delay: 0.04s; }
+        /* Hiệu ứng nảy quẻ ngẫu nhiên */
+        .shaking .stick-group:nth-child(odd) { animation: shake-up 0.12s infinite alternate; }
+        .shaking .stick-group:nth-child(even) { animation: shake-up 0.09s infinite alternate-reverse; }
 
-        @keyframes shake-s {
-            0% { transform: translateY(0) rotate(-2deg); }
-            100% { transform: translateY(-90px) rotate(4deg); }
+        @keyframes shake-up {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
         }
 
         .shaking-cup { animation: shake-c 0.1s infinite alternate; }
         @keyframes shake-c {
-            from { transform: rotate(-4deg); }
-            to { transform: rotate(4deg); }
+            from { transform: rotate(-5deg) translateX(-3px); }
+            to { transform: rotate(5deg) translateX(3px); }
         }
 
         /* QUẺ BAY VÀ CUỘN GIẤY */
         #flying-stick {
             position: fixed;
-            width: 40px;
+            width: 50px;
             z-index: 60;
             display: none;
             left: 50%;
-            top: 40%;
+            top: 45%;
             transform: translateX(-50%);
         }
 
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.88);
             display: none;
             z-index: 100;
             justify-content: center;
@@ -111,7 +108,7 @@
 
         .scroll-wrapper.open {
             width: 90vw;
-            max-width: 480px;
+            max-width: 500px;
         }
 
         .scroll-content {
@@ -132,15 +129,15 @@
         .scroll-content::after {
             content: "";
             position: absolute;
-            top: 8px; left: 8px; right: 8px; bottom: 8px;
-            border: 2px solid var(--red-ancient);
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid var(--red-ancient);
             outline: 3px double var(--red-ancient);
-            outline-offset: -10px;
+            outline-offset: -12px;
         }
 
         .roller {
             position: absolute;
-            width: 30px;
+            width: 35px;
             height: 105%;
             background: linear-gradient(to right, #2b1d1a, #5d4037, #2b1d1a);
             border-radius: 4px;
@@ -152,7 +149,7 @@
         .wish-text {
             font-family: 'Dancing Script', cursive;
             color: var(--ink);
-            font-size: 2.1rem;
+            font-size: 2.2rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
@@ -166,7 +163,7 @@
             position: relative;
             z-index: 20;
             margin-top: 40px;
-            padding: 15px 45px;
+            padding: 16px 50px;
             background: var(--red-ancient);
             color: var(--gold);
             border: 2px solid var(--gold);
@@ -174,6 +171,7 @@
             cursor: pointer;
             letter-spacing: 3px;
             text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
     </style>
 </head>
@@ -182,9 +180,14 @@
     <div id="container" onclick="startGieo()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         
-        <img class="stick-group s1" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 36%; transform: rotate(-5deg);">
-        <img class="stick-group s2" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 43%; transform: rotate(2deg);">
-        <img class="stick-group s3" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 50%; transform: rotate(7deg);">
+        <img class="stick-group s1" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 22%; transform: rotate(-12deg);">
+        <img class="stick-group s2" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 30%; transform: rotate(-6deg);">
+        <img class="stick-group s3" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 38%; transform: rotate(-2deg);">
+        <img class="stick-group s4" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 45%; transform: rotate(0deg);">
+        <img class="stick-group s5" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 52%; transform: rotate(3deg);">
+        <img class="stick-group s6" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 60%; transform: rotate(7deg);">
+        <img class="stick-group s7" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 28%; transform: rotate(-8deg); bottom: 190px; z-index: 2;">
+        <img class="stick-group s8" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 55%; transform: rotate(5deg); bottom: 195px; z-index: 2;">
         
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
@@ -265,50 +268,24 @@
             }, 800);
         }
 
-        // CHỨC NĂNG LẮC (Shake Functionality)
         function initShake() {
             let lastX, lastY, lastZ;
-            let moveCounter = 0;
-
             window.addEventListener('devicemotion', function(event) {
-                let acceleration = event.accelerationIncludingGravity;
-                if (!acceleration || active) return;
-
-                let curX = acceleration.x;
-                let curY = acceleration.y;
-                let curZ = acceleration.z;
-
+                let acc = event.accelerationIncludingGravity;
+                if (!acc || active) return;
+                let curX = acc.x; let curY = acc.y; let curZ = acc.z;
                 if (lastX !== undefined) {
-                    let diffX = Math.abs(lastX - curX);
-                    let diffY = Math.abs(lastY - curY);
-                    let diffZ = Math.abs(lastZ - curZ);
-
-                    // Ngưỡng lắc (Threshold) - điều chỉnh số 15 nếu muốn nhạy hơn
-                    if ((diffX > 15 && diffY > 15) || (diffX > 15 && diffZ > 15) || (diffY > 15 && diffZ > 15)) {
-                        moveCounter++;
-                        if (moveCounter > 2) {
-                            startGieo();
-                            moveCounter = 0;
-                        }
-                    }
+                    let diff = Math.abs(lastX - curX) + Math.abs(lastY - curY) + Math.abs(lastZ - curZ);
+                    if (diff > 35) startGieo();
                 }
                 lastX = curX; lastY = curY; lastZ = curZ;
             });
         }
 
-        document.getElementById('btnAction').onclick = (e) => {
-            e.stopPropagation();
-            // Yêu cầu quyền cảm biến cho iOS
+        document.getElementById('btnAction').onclick = () => {
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission()
-                    .then(response => {
-                        if (response == 'granted') initShake();
-                        startGieo();
-                    });
-            } else {
-                initShake();
-                startGieo();
-            }
+                DeviceMotionEvent.requestPermission().then(res => { if (res == 'granted') initShake(); startGieo(); });
+            } else { initShake(); startGieo(); }
         };
     </script>
 </body>
