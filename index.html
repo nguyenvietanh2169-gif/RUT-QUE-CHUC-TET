@@ -54,11 +54,11 @@
         #cup-back { z-index: 1; filter: brightness(0.3); }
         #cup-front { z-index: 5; filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8)); }
 
-        /* KHÔI PHỤC VỊ TRÍ CỤM QUẺ CỦA BẠN */
+        /* VỊ TRÍ CỤM QUẺ CỦA BẠN (LỆCH TRÁI 38%) */
         .sticks-bundle {
             position: absolute;
             bottom: 225px; 
-            left: 38%; /* Trả về vị trí lệch trái bạn đã chọn */
+            left: 38%; 
             transform: translateX(-50%);
             width: 66px; 
             height: 200px;
@@ -166,6 +166,8 @@
 </head>
 <body>
 
+    <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/fassounds-chinese-new-year-celebration-473044%20(mp3cut.net).mp3" loop preload="auto"></audio>
+
     <div id="container" onclick="startGieo()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         
@@ -223,6 +225,11 @@
             const container = document.getElementById('container');
             container.classList.add('shaking', 'shaking-cup');
 
+            // Nhạc bắt đầu khi nhấn nút (để trình duyệt không chặn)
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.5;
+            music.play().catch(e => console.log("Cần click để phát nhạc"));
+
             setTimeout(() => {
                 container.classList.remove('shaking', 'shaking-cup');
                 openScroll();
@@ -244,6 +251,9 @@
 
         function closeScroll() {
             document.getElementById('scrollWrapper').classList.remove('open');
+            // Nếu bạn muốn tắt nhạc khi đóng cuộn giấy, hãy bỏ comment dòng dưới:
+            // document.getElementById('bgMusic').pause();
+            
             setTimeout(() => {
                 document.getElementById('scroll-overlay').style.display = 'none';
                 document.getElementById('btnAction').style.visibility = 'visible';
