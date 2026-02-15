@@ -31,10 +31,11 @@
             z-index: 0;
         }
 
+        /* ỐNG QUẺ - KHÔI PHỤC NGUYÊN BẢN */
         #container {
             position: relative;
             width: 320px;
-            height: 400px;
+            height: 480px;
             z-index: 10;
             cursor: pointer;
             display: flex;
@@ -47,7 +48,7 @@
 
         .sticks-bundle {
             position: absolute;
-            bottom: 180px; 
+            bottom: 225px; 
             left: 38%; 
             transform: translateX(-50%);
             width: 66px; 
@@ -64,6 +65,7 @@
             bottom: 0;
         }
 
+        /* HIỆU ỨNG LẮC */
         .shaking .stick-item { animation: shake-h 0.12s infinite alternate; }
         @keyframes shake-h {
             0% { transform: translateX(-10px) rotate(var(--r)); }
@@ -72,6 +74,7 @@
         .shaking-cup { animation: cup-vibrate 0.1s infinite alternate; }
         @keyframes cup-vibrate { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
 
+        /* LIỄN FULL MÀN HÌNH */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -82,48 +85,41 @@
             align-items: center;
         }
 
-        /* LIỄN FULL MÀN HÌNH */
         .lien-wrapper {
             position: relative;
-            width: 90vw; /* Chiều rộng 90% màn hình */
-            max-width: 450px;
+            width: 90vw;
+            max-width: 500px;
             height: 0;
             overflow: hidden;
             transition: height 1.5s cubic-bezier(0.19, 1, 0.22, 1);
             box-shadow: 0 0 60px rgba(0,0,0,0.8);
-            will-change: height;
         }
 
         .lien-bg {
             position: absolute;
             top: 0; left: 0;
             width: 100%;
-            height: 90vh; /* Chiều cao cố định của liễn */
+            height: 90vh;
             background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/nen%20chu%20chuc%20tet.png?raw=true') no-repeat center top;
             background-size: 100% 100%;
         }
 
-        .lien-wrapper.open {
-            height: 90vh; /* Mở rộng ra 90% chiều cao màn hình */
-        }
+        .lien-wrapper.open { height: 90vh; }
 
         /* CHỮ VÀNG ÁNH KIM VÀ VỊ TRÍ THẤP */
         .wish-text {
             position: relative;
             z-index: 2;
             font-family: 'Dancing Script', cursive;
-            
-            /* Màu vàng ánh kim */
             background: linear-gradient(to bottom, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
-
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            padding-top: 320px; /* Đẩy chữ xuống thấp */
+            padding-top: 380px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             transition: opacity 0.8s 1.2s;
         }
         .open .wish-text { opacity: 1; }
@@ -134,7 +130,6 @@
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
             cursor: pointer; letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
         #fireworks-canvas {
@@ -144,10 +139,6 @@
     </style>
 </head>
 <body>
-
-    <div style="display:none;">
-        <img src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/nen%20chu%20chuc%20tet.png?raw=true">
-    </div>
 
     <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/fassounds-chinese-new-year-celebration-473044%20(mp3cut.net).mp3" loop preload="auto"></audio>
 
@@ -199,33 +190,42 @@
             active = true;
             document.getElementById('btnAction').style.visibility = 'hidden';
             
-            const music = document.getElementById('bgMusic');
-            music.volume = 0.5;
-            music.play().catch(()=>{});
+            // Ở đây bạn có thể thêm lệnh phát tiếng "Lắc quẻ cọc cạch"
+            // Ví dụ: soundLacQue.play();
 
-            document.getElementById('container').classList.add('shaking', 'shaking-cup');
+            const container = document.getElementById('container');
+            container.classList.add('shaking', 'shaking-cup');
 
             setTimeout(() => {
-                document.getElementById('container').classList.remove('shaking', 'shaking-cup');
+                container.classList.remove('shaking', 'shaking-cup');
                 openScroll();
-            }, 1500);
+            }, 1500); // 1.5 giây lắc quẻ cọc cạch
         }
 
         function openScroll() {
+            // NHẠC NỀN PHÁT TẠI ĐÂY - LÚC TẤM LIỄN BẮT ĐẦU BAY LÊN
+            const music = document.getElementById('bgMusic');
+            music.currentTime = 0; 
+            music.volume = 0.5;
+            music.play().catch(()=>{});
+
             const random = wishes[Math.floor(Math.random() * wishes.length)];
             document.getElementById('wishDisplay').innerText = random;
             document.getElementById('scroll-overlay').style.display = 'flex';
-            
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
             setTimeout(() => {
                 document.getElementById('lienWrapper').classList.add('open');
                 animateFireworks();
-            }, 50);
+            }, 100);
         }
 
         function closeScroll() {
+            // Dừng nhạc khi đóng liễn để lần sau phát lại từ đầu
+            const music = document.getElementById('bgMusic');
+            music.pause();
+
             document.getElementById('lienWrapper').classList.remove('open');
             setTimeout(() => {
                 document.getElementById('scroll-overlay').style.display = 'none';
