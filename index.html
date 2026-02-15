@@ -63,14 +63,29 @@
             width: 95px; 
             filter: brightness(0.85) contrast(1.1);
             bottom: 0;
+            transform-origin: bottom center;
         }
 
-        /* HIỆU ỨNG LẮC */
-        .shaking .stick-item { animation: shake-h 0.12s infinite alternate; }
-        @keyframes shake-h {
-            0% { transform: translateX(-10px) rotate(var(--r)); }
-            100% { transform: translateX(10px) rotate(var(--r)); }
+        /* HIỆU ỨNG LẮC LỘN XỘN THEO CHIỀU NGANG */
+        .shaking .stick-item { 
+            animation: messy-shake 0.15s infinite alternate; 
         }
+
+        /* Tạo sự lộn xộn bằng cách cho mỗi cây quẻ delay khác nhau */
+        .stick-item:nth-child(1) { animation-delay: 0.01s; }
+        .stick-item:nth-child(2) { animation-delay: 0.05s; }
+        .stick-item:nth-child(3) { animation-delay: 0.03s; }
+        .stick-item:nth-child(4) { animation-delay: 0.07s; }
+        .stick-item:nth-child(5) { animation-delay: 0.02s; }
+
+        @keyframes messy-shake {
+            0% { transform: translateX(-15px) rotate(calc(var(--r) - 5deg)); }
+            25% { transform: translateX(10px) rotate(calc(var(--r) + 3deg)); }
+            50% { transform: translateX(-8px) rotate(calc(var(--r) - 2deg)); }
+            75% { transform: translateX(12px) rotate(calc(var(--r) + 6deg)); }
+            100% { transform: translateX(-12px) rotate(calc(var(--r) - 4deg)); }
+        }
+
         .shaking-cup { animation: cup-vibrate 0.1s infinite alternate; }
         @keyframes cup-vibrate { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
 
@@ -106,7 +121,7 @@
 
         .lien-wrapper.open { height: 90vh; }
 
-        /* CHỮ VÀNG ÁNH KIM VÀ VỊ TRÍ THẤP */
+        /* CHỮ VÀNG ÁNH KIM VÀ VỊ TRÍ LÊN TRÊN */
         .wish-text {
             position: relative;
             z-index: 2;
@@ -118,7 +133,7 @@
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            padding-top: 380px; 
+            padding-top: 150px; /* ĐÃ CHỈNH LÊN TRÊN (giảm từ 380px xuống 150px) */
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             transition: opacity 0.8s 1.2s;
         }
@@ -171,14 +186,15 @@
     <script>
         const wishes = [
             "Ăn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
-            "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên\nKhông có gì phiền",
+            "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
+            "Ăn ngon không mập\nNgủ kỹ không muộn\nMuộn phiền tự tan",
             "Cuộc sống nở hoa\nDrama không có\nVí tiền tự to",
-            "Tâm an thân khỏe\nChẳng chút ưu phiền\nSống vui sống khoẻ\n Như tiên trên đời",
-            "Vàng ròng đầy tủ\nKim cương đầy khay\nLàm chơi ăn thật\nTiền về đầy tay",
-            "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết\nĐau đầu chọn xe",
-            "Thần Tài gõ cửa\nPhú quý vây quanh\nCát tường như ý\nTài lộc tươi xanh",
-            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ\n Không chờ cũng đến",
-            "Sức khỏe dẻo dai\nPhong độ bất bại\nĂn ngon ngủ kĩ\nTinh thần thảnh thơi"
+            "Tâm an thân khỏe\nChẳng chút ưu phiền\nVui vẻ như tiên",
+            "Vàng ròng đầy tủ\nKim cương đầy khay\nLộc về đầy tay",
+            "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết",
+            "Thần Tài gõ cửa\nPhú quý vây quanh\nTài lộc tươi xanh",
+            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ",
+            "Sức khỏe dẻo dai\nPhong độ bất bại\nTinh thần xanh tươi"
         ];
 
         let active = false;
@@ -191,7 +207,6 @@
             active = true;
             document.getElementById('btnAction').style.visibility = 'hidden';
             
-            // 1. PHÁT TIẾNG LẮC QUẺ NGAY LẬP TỨC
             const soundLacQue = document.getElementById('lacQueSound');
             soundLacQue.currentTime = 0;
             soundLacQue.play().catch(()=>{});
@@ -199,7 +214,6 @@
             const container = document.getElementById('container');
             container.classList.add('shaking', 'shaking-cup');
 
-            // Sau 1.5 giây (thời gian lắc), quẻ ngừng và mở liễn
             setTimeout(() => {
                 container.classList.remove('shaking', 'shaking-cup');
                 openScroll();
@@ -207,7 +221,6 @@
         }
 
         function openScroll() {
-            // 2. PHÁT NHẠC NỀN CHÚC TẾT KHI LIỄN BẮT ĐẦU MỞ
             const music = document.getElementById('bgMusic');
             music.currentTime = 0; 
             music.volume = 0.5;
@@ -226,10 +239,8 @@
         }
 
         function closeScroll() {
-            // Dừng cả hai âm thanh khi đóng
             document.getElementById('bgMusic').pause();
             document.getElementById('lacQueSound').pause();
-
             document.getElementById('lienWrapper').classList.remove('open');
             setTimeout(() => {
                 document.getElementById('scroll-overlay').style.display = 'none';
@@ -239,7 +250,6 @@
             }, 800);
         }
 
-        // PHÁO HOA
         function createParticle(x, y) {
             const colors = ['#FFD700', '#FF4500', '#FF69B4', '#00FFFF', '#ADFF2F'];
             for (let i = 0; i < 20; i++) {
