@@ -34,10 +34,11 @@
             z-index: 0;
         }
 
+        /* ỐNG QUẺ */
         #container {
             position: relative;
-            width: 320px;
-            height: 450px;
+            width: 350px;
+            height: 500px;
             z-index: 10;
             cursor: pointer;
             display: flex;
@@ -49,41 +50,41 @@
         #cup-back { z-index: 1; filter: brightness(0.4); }
         #cup-front { z-index: 5; filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8)); }
 
-        /* NHÓM QUẺ TO - NẰM SÁT NHAU */
+        /* CỤM 8 CÂY QUẺ TO - CĂN GIỮA */
+        .sticks-container {
+            position: absolute;
+            bottom: 210px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 3;
+        }
+
         .stick-group {
             position: absolute;
-            bottom: 210px; 
-            width: 22%; /* Quẻ to hơn */
-            z-index: 3;
-            filter: brightness(0.8);
+            width: 28%; /* Quẻ to hơn */
+            filter: brightness(0.85);
             transition: transform 0.1s;
+            bottom: 0;
         }
 
-        /* Biên độ lắc dọc nhỏ lại cho thật hơn */
-        .shaking .stick-group { animation: shake-up-small 0.15s infinite alternate; }
-        .shaking .stick-group:nth-child(even) { animation-duration: 0.1s; animation-delay: 0.05s; }
+        /* Hiệu ứng lắc dọc nhẹ nhàng */
+        .shaking .stick-group { animation: shake-vertical 0.15s infinite alternate; }
+        .shaking .stick-group:nth-child(even) { animation-delay: 0.05s; }
 
-        @keyframes shake-up-small {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-40px); } /* Lắc dọc nhỏ lại */
+        @keyframes shake-vertical {
+            0% { transform: translateY(0) rotate(var(--r)); }
+            100% { transform: translateY(-35px) rotate(var(--r)); }
         }
 
-        .shaking-cup { animation: shake-c 0.1s infinite alternate; }
-        @keyframes shake-c {
-            from { transform: rotate(-3deg) translateX(-2px); }
-            to { transform: rotate(3deg) translateX(2px); }
+        .shaking-cup { animation: shake-cup 0.1s infinite alternate; }
+        @keyframes shake-cup {
+            from { transform: rotate(-3deg); }
+            to { transform: rotate(3deg); }
         }
 
-        #flying-stick {
-            position: fixed;
-            width: 55px;
-            z-index: 60;
-            display: none;
-            left: 50%;
-            top: 45%;
-            transform: translateX(-50%);
-        }
-
+        /* CUỘN GIẤY & PHÁO HOA */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -94,82 +95,70 @@
             align-items: center;
         }
 
+        #fireworks-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
         .scroll-wrapper {
             position: relative;
             width: 40px;
-            height: 75vh;
+            height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: width 1.3s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 110;
         }
 
-        .scroll-wrapper.open {
-            width: 90vw;
-            max-width: 500px;
-        }
+        .scroll-wrapper.open { width: 92vw; max-width: 500px; }
 
         .scroll-content {
-            width: 100%;
-            height: 95%;
+            width: 100%; height: 95%;
             background: var(--paper);
-            background-image: 
-                url('https://www.transparenttextures.com/patterns/handmade-paper.png'),
-                radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(210,180,140,0.2) 100%);
+            background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png');
             border: 10px solid var(--silk);
-            box-shadow: 0 0 50px rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            display: flex; align-items: center; justify-content: center;
             position: relative;
         }
 
         .scroll-content::after {
-            content: "";
-            position: absolute;
+            content: ""; position: absolute;
             top: 10px; left: 10px; right: 10px; bottom: 10px;
-            border: 1px solid var(--red-ancient);
+            border: 2px solid var(--red-ancient);
             outline: 3px double var(--red-ancient);
             outline-offset: -12px;
         }
 
-        .roller {
-            position: absolute;
-            width: 35px;
-            height: 105%;
-            background: linear-gradient(to right, #2b1d1a, #5d4037, #2b1d1a);
-            border-radius: 4px;
-            z-index: 10;
-        }
-        .roller.left { left: -5px; transform: translateX(-50%); }
-        .roller.right { right: -5px; transform: translateX(50%); }
-
         .wish-text {
             font-family: 'Dancing Script', cursive;
             color: var(--ink);
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            z-index: 5;
             transition: opacity 0.8s 1s;
         }
 
         .open .wish-text { opacity: 1; }
 
+        .roller {
+            position: absolute; width: 35px; height: 105%;
+            background: linear-gradient(to right, #2b1d1a, #5d4037, #2b1d1a);
+            border-radius: 4px; z-index: 120;
+        }
+        .roller.left { left: 0; transform: translateX(-50%); }
+        .roller.right { right: 0; transform: translateX(50%); }
+
         .btn-ui {
-            position: relative;
-            z-index: 20;
-            margin-top: 40px;
-            padding: 16px 50px;
-            background: var(--red-ancient);
-            color: var(--gold);
-            border: 2px solid var(--gold);
-            font-weight: bold;
-            cursor: pointer;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            position: relative; z-index: 20;
+            margin-top: 30px; padding: 16px 50px;
+            background: var(--red-ancient); color: var(--gold);
+            border: 2px solid var(--gold); font-weight: bold;
+            cursor: pointer; letter-spacing: 3px; text-transform: uppercase;
         }
     </style>
 </head>
@@ -178,23 +167,24 @@
     <div id="container" onclick="startGieo()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 36%; transform: rotate(-5deg);">
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 38%; transform: rotate(-2deg);">
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 41%; transform: rotate(0deg);">
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 44%; transform: rotate(2deg);">
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 47%; transform: rotate(4deg);">
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 40%; transform: rotate(-3deg); z-index: 4;">
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 43%; transform: rotate(1deg); z-index: 4;">
-        <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 46%; transform: rotate(3deg); z-index: 4;">
+        <div class="sticks-container">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -6deg; left: 38%;">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -3deg; left: 42%;">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; left: 46%;">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 3deg; left: 50%;">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 6deg; left: 54%;">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -2deg; left: 40%; z-index: 4; margin-bottom: -10px;">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 1deg; left: 45%; z-index: 4; margin-bottom: -10px;">
+            <img class="stick-group" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 4deg; left: 50%; z-index: 4; margin-bottom: -10px;">
+        </div>
         
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
 
-    <img id="flying-stick" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
-
     <button class="btn-ui" id="btnAction">TÂM THÀNH Ý NGUYỆN</button>
 
     <div id="scroll-overlay" onclick="closeScroll()">
+        <canvas id="fireworks-canvas"></canvas>
         <div class="scroll-wrapper" id="scrollWrapper">
             <div class="roller left"></div>
             <div class="scroll-content">
@@ -221,40 +211,35 @@
         ];
 
         let active = false;
-        const sfx = document.getElementById('sfx');
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
         function startGieo() {
             if (active) return;
             active = true;
             document.getElementById('btnAction').style.visibility = 'hidden';
-
-            sfx.play().catch(()=>{});
+            document.getElementById('sfx').play().catch(()=>{});
+            
             const container = document.getElementById('container');
             container.classList.add('shaking', 'shaking-cup');
 
             setTimeout(() => {
                 container.classList.remove('shaking', 'shaking-cup');
-                launchStick();
-            }, 1400);
-        }
-
-        function launchStick() {
-            const fs = document.getElementById('flying-stick');
-            fs.style.display = 'block';
-            fs.animate([
-                { top: '45%', opacity: 1, transform: 'translateX(-50%) scale(1)' },
-                { top: '20%', opacity: 0, transform: 'translateX(-50%) scale(3) rotate(720deg)' }
-            ], { duration: 1100, easing: 'ease-in-out' }).onfinish = () => {
-                fs.style.display = 'none';
                 openScroll();
-            };
+            }, 1400);
         }
 
         function openScroll() {
             const random = wishes[Math.floor(Math.random() * wishes.length)];
             document.getElementById('wishDisplay').innerText = random + "\nBính Ngọ 2026";
             document.getElementById('scroll-overlay').style.display = 'flex';
-            setTimeout(() => document.getElementById('scrollWrapper').classList.add('open'), 50);
+            resizeCanvas();
+            
+            setTimeout(() => {
+                document.getElementById('scrollWrapper').classList.add('open');
+                startFireworks();
+            }, 100);
         }
 
         function closeScroll() {
@@ -263,28 +248,45 @@
                 document.getElementById('scroll-overlay').style.display = 'none';
                 document.getElementById('btnAction').style.visibility = 'visible';
                 active = false;
+                particles = [];
             }, 800);
         }
 
-        function initShake() {
-            let lastX, lastY, lastZ;
-            window.addEventListener('devicemotion', function(event) {
-                let acc = event.accelerationIncludingGravity;
-                if (!acc || active) return;
-                let curX = acc.x; let curY = acc.y; let curZ = acc.z;
-                if (lastX !== undefined) {
-                    let diff = Math.abs(lastX - curX) + Math.abs(lastY - curY) + Math.abs(lastZ - curZ);
-                    if (diff > 35) startGieo();
-                }
-                lastX = curX; lastY = curY; lastZ = curZ;
-            });
+        // FIREWORKS LOGIC
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
 
-        document.getElementById('btnAction').onclick = () => {
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission().then(res => { if (res == 'granted') initShake(); startGieo(); });
-            } else { initShake(); startGieo(); }
-        };
+        function createParticle(x, y) {
+            const colors = ['#ff0', '#f0f', '#0ff', '#f00', '#fff', '#d4af37'];
+            for (let i = 0; i < 30; i++) {
+                particles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10,
+                    alpha: 1,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+        }
+
+        function startFireworks() {
+            if (!active) return;
+            if (Math.random() < 0.1) createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy; p.alpha -= 0.01;
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fill();
+                if (p.alpha <= 0) particles.splice(i, 1);
+            });
+            requestAnimationFrame(startFireworks);
+        }
+
+        document.getElementById('btnAction').onclick = startGieo;
     </script>
 </body>
 </html>
