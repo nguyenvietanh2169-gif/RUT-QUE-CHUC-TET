@@ -66,12 +66,11 @@
             transform-origin: bottom center;
         }
 
+        /* CHỈNH LẠI HIỆU ỨNG LẮC GỌN TRONG ỐNG */
         .shaking .stick-item { 
-            /* Tăng từ 0.15s lên 0.4s để lắc chậm hơn */
             animation: messy-shake 0.4s infinite alternate; 
         }
 
-        /* Độ trễ ngẫu nhiên để các cây quẻ không lắc cùng lúc */
         .stick-item:nth-child(1) { animation-delay: 0.1s; }
         .stick-item:nth-child(2) { animation-delay: 0.25s; }
         .stick-item:nth-child(3) { animation-delay: 0.15s; }
@@ -79,17 +78,18 @@
         .stick-item:nth-child(5) { animation-delay: 0.2s; }
 
         @keyframes messy-shake {
-            0% { transform: translateX(-15px) rotate(calc(var(--r) - 5deg)); }
-            25% { transform: translateX(12px) rotate(calc(var(--r) + 4deg)); }
-            50% { transform: translateX(-10px) rotate(calc(var(--r) - 2deg)); }
-            75% { transform: translateX(14px) rotate(calc(var(--r) + 5deg)); }
-            100% { transform: translateX(-12px) rotate(calc(var(--r) - 3deg)); }
+            /* Giảm translateX xuống còn khoảng 5px để không bị lộ ra ngoài ống */
+            0% { transform: translateX(-5px) rotate(calc(var(--r) - 2deg)); }
+            25% { transform: translateX(4px) rotate(calc(var(--r) + 2deg)); }
+            50% { transform: translateX(-3px) rotate(calc(var(--r) - 1deg)); }
+            75% { transform: translateX(5px) rotate(calc(var(--r) + 3deg)); }
+            100% { transform: translateX(-4px) rotate(calc(var(--r) - 2deg)); }
         }
 
-        /* Rung ống quẻ chậm lại */
         .shaking-cup { animation: cup-vibrate 0.2s infinite alternate; }
-        @keyframes cup-vibrate { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
-        /* LIỄN ĐỎ FULL MÀN HÌNH */
+        @keyframes cup-vibrate { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+
+        /* LIỄN ĐỎ */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -121,7 +121,6 @@
 
         .lien-wrapper.open { height: 90vh; }
 
-        /* CHỮ VÀNG ÁNH KIM VÀ VỊ TRÍ LÊN TRÊN */
         .wish-text {
             position: relative;
             z-index: 2;
@@ -129,11 +128,11 @@
             background: linear-gradient(to bottom, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2.6rem;
+            font-size: 2.5rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            padding-top: 500px; 
+            padding-top: 350px; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             transition: opacity 0.8s 1.2s;
         }
@@ -145,6 +144,7 @@
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
             cursor: pointer; letter-spacing: 2px;
+            border-radius: 5px;
         }
 
         #fireworks-canvas {
@@ -156,7 +156,6 @@
 <body>
 
     <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
-    
     <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
 
     <div id="container" onclick="startGieo()">
@@ -217,13 +216,13 @@
             setTimeout(() => {
                 container.classList.remove('shaking', 'shaking-cup');
                 openScroll();
-            }, 1500);
+            }, 1800);
         }
 
         function openScroll() {
             const music = document.getElementById('bgMusic');
             music.currentTime = 0; 
-            music.volume = 0.5;
+            music.volume = 0.6;
             music.play().catch(()=>{});
 
             const random = wishes[Math.floor(Math.random() * wishes.length)];
