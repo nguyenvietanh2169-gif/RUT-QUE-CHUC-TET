@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gieo Quẻ Thư Pháp 2026</title>
+    <title>Gieo Quẻ Bính Ngọ 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --red-silk: #a00000;
+            --red-silk: #8b0000;
             --gold: #d4af37;
-            --paper: #fdf5e6;
+            /* Màu giấy xuyến chỉ có vân nhám */
+            --paper-texture: #f4f1ea; 
         }
 
         body {
             margin: 0;
-            background: #222 url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6492.JPG?raw=true') no-repeat center center fixed;
+            background: #1a1a1a url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6492.JPG?raw=true') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Arial', sans-serif;
             overflow: hidden;
         }
 
@@ -29,47 +29,63 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.6);
+            z-index: 0;
         }
 
-        /* Ống quẻ */
+        /* ỐNG QUẺ VÀ 3 CÂY QUẺ */
         #container {
             position: relative;
+            width: 220px;
+            height: 400px;
             z-index: 10;
-            width: 200px;
-            height: 350px;
             cursor: pointer;
             display: flex;
-            align-items: flex-end;
             justify-content: center;
         }
 
-        .cup-layer { position: absolute; width: 100%; bottom: 0; pointer-events: none; }
-        #sticks { z-index: 2; bottom: 80px; width: 65%; transition: transform 0.1s; }
-        #cup-front { z-index: 3; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
+        #cup-back { z-index: 1; filter: brightness(0.4); }
+        #cup-front { z-index: 5; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.7)); }
 
-        /* Hiệu ứng lắc */
-        .shaking { animation: shake 0.1s infinite alternate; }
-        @keyframes shake {
-            from { transform: rotate(5deg) translateY(0); }
-            to { transform: rotate(-5deg) translateY(-10px); }
+        .stick-group {
+            position: absolute;
+            bottom: 100px;
+            width: 45%;
+            transition: transform 0.1s;
         }
 
-        /* Cây quẻ bay */
+        /* Lắc khác nhau cho 3 cây quẻ */
+        .shaking .s1 { animation: shake-stick 0.12s infinite alternate; }
+        .shaking .s2 { animation: shake-stick 0.08s infinite alternate-reverse; }
+        .shaking .s3 { animation: shake-stick 0.1s infinite alternate; animation-delay: 0.05s; }
+
+        @keyframes shake-stick {
+            0% { transform: translateY(0) rotate(-2deg); }
+            100% { transform: translateY(-40px) rotate(3deg); }
+        }
+
+        @keyframes shake-cup {
+            0% { transform: rotate(-2deg); }
+            100% { transform: rotate(2deg); }
+        }
+        .shaking-cup { animation: shake-cup 0.1s infinite; }
+
+        /* CÂY QUẺ BAY */
         #flying-stick {
             position: fixed;
-            width: 50px;
+            width: 45px;
             z-index: 50;
             display: none;
             left: 50%;
-            bottom: 200px;
+            bottom: 250px;
             transform: translateX(-50%);
         }
 
-        /* Cuộn giấy thư pháp */
+        /* CUỘN THƯ PHÁP */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: none;
             z-index: 100;
             justify-content: center;
@@ -78,13 +94,13 @@
 
         .scroll-wrapper {
             position: relative;
-            width: 60px; /* Ban đầu thu nhỏ như cây quẻ */
-            height: 70vh;
-            max-height: 500px;
+            width: 40px;
+            height: 75vh;
+            max-height: 550px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: width 1.2s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .scroll-wrapper.open {
@@ -92,64 +108,87 @@
             max-width: 450px;
         }
 
+        /* GIẤY THƯ PHÁP CHÂN THẬT */
         .scroll-content {
             width: 100%;
             height: 90%;
-            background: var(--paper);
-            border: 2px solid var(--red-silk);
-            outline: 5px double var(--red-silk);
-            outline-offset: -12px;
+            background-color: var(--paper-texture);
+            /* Tạo vân giấy bằng gradient */
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 10px);
+            border: 1px solid #d2b48c;
+            box-shadow: 
+                inset 0 0 60px rgba(0,0,0,0.1),
+                0 10px 40px rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* Viền đỏ sớ tết */
+        .scroll-content::after {
+            content: "";
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 2px solid var(--red-silk);
+            outline: 4px double var(--red-silk);
+            outline-offset: -12px;
+            pointer-events: none;
         }
 
         .roller {
             position: absolute;
-            width: 25px;
+            width: 28px;
             height: 105%;
-            background: linear-gradient(to right, #3e2723, #5d4037, #3e2723);
-            border-radius: 4px;
+            background: linear-gradient(to right, #2b1d1a, #5d4037, #2b1d1a);
+            border-radius: 5px;
             z-index: 2;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
-
         .roller.left { left: 0; transform: translateX(-50%); }
         .roller.right { right: 0; transform: translateX(50%); }
 
         .wish-text {
             font-family: 'Dancing Script', cursive;
             color: var(--red-silk);
-            font-size: 2rem;
+            font-size: 2.2rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            transition: opacity 0.8s 0.8s;
+            z-index: 3;
+            transition: opacity 1s 1s;
+            filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.1));
         }
 
         .open .wish-text { opacity: 1; }
 
-        /* Nút */
-        .btn-start {
+        .btn-ui {
             position: absolute;
-            bottom: 50px;
-            padding: 15px 40px;
+            bottom: 60px;
+            padding: 15px 35px;
             background: var(--red-silk);
             color: var(--gold);
             border: 2px solid var(--gold);
             font-weight: bold;
             cursor: pointer;
             z-index: 20;
-            border-radius: 50px;
+            border-radius: 5px;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
 
-    <div id="container" onclick="startGieoQue()">
-        <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true" style="filter: brightness(0.5)">
-        <img id="sticks" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true">
+    <div id="container" onclick="startGieo()">
+        <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
+        
+        <img class="stick-group s1" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 20%; transform: rotate(-5deg);">
+        <img class="stick-group s2" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 30%; transform: rotate(2deg);">
+        <img class="stick-group s3" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 40%; transform: rotate(8deg);">
+        
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
 
@@ -165,95 +204,78 @@
         </div>
     </div>
 
-    <button class="btn-start" id="btnStart">CHẠM ĐỂ GIEO QUẺ</button>
+    <button class="btn-ui" id="btnAction">KHỞI TÂM XIN QUẺ</button>
 
     <audio id="sfx" src="https://www.soundjay.com/misc/sounds/wooden-clatter-1.mp3"></audio>
 
     <script>
         const wishes = [
             "Mã Đáo Thành Công\nVạn Sự Hanh Thông",
-            "Tiền Vô Như Nước\nPhúc Lộc Đầy Nhà",
-            "An Khang Thịnh Vượng\nSức Khỏe Dồi Dào",
-            "Tình Duyên Viên Mãn\nHạnh Phúc Vững Bền",
+            "Phúc Lộc Đầy Nhà\nTiền Vô Như Nước",
+            "Sức Khỏe Dồi Dào\nAn Khang Thịnh Vượng",
             "Công Thành Danh Toại\nSự Nghiệp Thăng Hoa",
-            "Ngũ Phúc Lâm Môn\nPhú Quý Cát Tường",
-            "Vạn Sự Như Ý\nĐắc Lộc Toàn Gia",
-            "Thân Tâm An Lạc\nTrí Tuệ Minh Mẫn"
+            "Tình Duyên Viên Mãn\nHạnh Phúc Bền Lâu",
+            "Ngũ Phúc Lâm Môn\nPhú Quý Cát Tường"
         ];
 
-        let canShake = true;
-        const container = document.getElementById('container');
-        const flyingStick = document.getElementById('flying-stick');
-        const scrollOverlay = document.getElementById('scroll-overlay');
-        const scrollWrapper = document.getElementById('scrollWrapper');
-        const wishDisplay = document.getElementById('wishDisplay');
+        let active = false;
         const sfx = document.getElementById('sfx');
 
-        function startGieoQue() {
-            if (!canShake) return;
-            canShake = false;
-            document.getElementById('btnStart').style.display = 'none';
+        function startGieo() {
+            if (active) return;
+            active = true;
+            document.getElementById('btnAction').style.display = 'none';
 
-            // Bắt đầu lắc
             sfx.play();
-            container.classList.add('shaking');
+            const container = document.getElementById('container');
+            container.classList.add('shaking', 'shaking-cup');
 
             setTimeout(() => {
-                container.classList.remove('shaking');
-                animateStick();
-            }, 1200);
+                container.classList.remove('shaking', 'shaking-cup');
+                launchStick();
+            }, 1500);
         }
 
-        function animateStick() {
-            flyingStick.style.display = 'block';
+        function launchStick() {
+            const fs = document.getElementById('flying-stick');
+            fs.style.display = 'block';
             
-            // Cây quẻ bay vọt lên trung tâm màn hình
-            const fly = flyingStick.animate([
-                { bottom: '200px', transform: 'translateX(-50%) rotate(0deg)', opacity: 1 },
-                { bottom: '50%', transform: 'translateX(-50%) translateY(50%) rotate(720deg) scale(2)', opacity: 1 }
+            const anim = fs.animate([
+                { bottom: '250px', transform: 'translateX(-50%) scale(1) rotate(0deg)', opacity: 1 },
+                { bottom: '50%', transform: 'translateX(-50%) translateY(50%) scale(2.5) rotate(1080deg)', opacity: 0 }
             ], {
-                duration: 1000,
-                easing: 'ease-out',
-                fill: 'forwards'
+                duration: 1200,
+                easing: 'ease-in-out'
             });
 
-            fly.onfinish = () => {
-                setTimeout(() => {
-                    flyingStick.style.display = 'none';
-                    openScroll();
-                }, 200);
+            anim.onfinish = () => {
+                fs.style.display = 'none';
+                openScroll();
             };
         }
 
         function openScroll() {
-            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-            wishDisplay.innerText = randomWish + "\nBính Ngọ 2026";
+            const random = wishes[Math.floor(Math.random() * wishes.length)];
+            document.getElementById('wishDisplay').innerText = random + "\nBính Ngọ 2026";
             
-            scrollOverlay.style.display = 'flex';
+            document.getElementById('scroll-overlay').style.display = 'flex';
             setTimeout(() => {
-                scrollWrapper.classList.add('open');
-            }, 50);
+                document.getElementById('scrollWrapper').classList.add('open');
+            }, 100);
         }
 
         function closeScroll() {
-            scrollWrapper.classList.remove('open');
+            document.getElementById('scrollWrapper').classList.remove('open');
             setTimeout(() => {
-                scrollOverlay.style.display = 'none';
-                canShake = true;
-                document.getElementById('btnStart').style.display = 'block';
+                document.getElementById('scroll-overlay').style.display = 'none';
+                document.getElementById('btnAction').style.display = 'block';
+                active = false;
             }, 800);
         }
 
-        // Xin quyền cảm biến cho iOS
-        document.getElementById('btnStart').onclick = (e) => {
+        document.getElementById('btnAction').onclick = (e) => {
             e.stopPropagation();
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission().then(res => {
-                    if(res === 'granted') startGieoQue();
-                });
-            } else {
-                startGieoQue();
-            }
+            startGieo();
         };
     </script>
 </body>
