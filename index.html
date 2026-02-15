@@ -31,7 +31,7 @@
             z-index: 0;
         }
 
-        /* ỐNG QUẺ - KHÔI PHỤC NGUYÊN BẢN */
+        /* ỐNG QUẺ */
         #container {
             position: relative;
             width: 320px;
@@ -74,7 +74,7 @@
         .shaking-cup { animation: cup-vibrate 0.1s infinite alternate; }
         @keyframes cup-vibrate { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
 
-        /* LIỄN FULL MÀN HÌNH */
+        /* LIỄN ĐỎ FULL MÀN HÌNH */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -141,6 +141,8 @@
 <body>
 
     <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/fassounds-chinese-new-year-celebration-473044%20(mp3cut.net).mp3" loop preload="auto"></audio>
+    
+    <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
 
     <div id="container" onclick="startGieo()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
@@ -169,15 +171,14 @@
     <script>
         const wishes = [
             "Ăn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
-            "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
-            "Ăn ngon không mập\nNgủ kỹ không muộn\nMuộn phiền tự tan",
+            "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên\nKhông có gì phiền",
             "Cuộc sống nở hoa\nDrama không có\nVí tiền tự to",
-            "Tâm an thân khỏe\nChẳng chút ưu phiền\nVui vẻ như tiên",
-            "Vàng ròng đầy tủ\nKim cương đầy khay\nLộc về đầy tay",
-            "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết",
-            "Thần Tài gõ cửa\nPhú quý vây quanh\nTài lộc tươi xanh",
-            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ",
-            "Sức khỏe dẻo dai\nPhong độ bất bại\nTinh thần xanh tươi"
+            "Tâm an thân khỏe\nChẳng chút ưu phiền\nSống vui sống khoẻ\n Như tiên trên đời",
+            "Vàng ròng đầy tủ\nKim cương đầy khay\nLàm chơi ăn thật\nTiền về đầy tay",
+            "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết\nĐau đầu chọn xe",
+            "Thần Tài gõ cửa\nPhú quý vây quanh\nCát tường như ý\nTài lộc tươi xanh",
+            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ\n Không chờ cũng đến",
+            "Sức khỏe dẻo dai\nPhong độ bất bại\nĂn ngon ngủ kĩ\nTinh thần thảnh thơi"
         ];
 
         let active = false;
@@ -190,20 +191,23 @@
             active = true;
             document.getElementById('btnAction').style.visibility = 'hidden';
             
-            // Ở đây bạn có thể thêm lệnh phát tiếng "Lắc quẻ cọc cạch"
-            // Ví dụ: soundLacQue.play();
+            // 1. PHÁT TIẾNG LẮC QUẺ NGAY LẬP TỨC
+            const soundLacQue = document.getElementById('lacQueSound');
+            soundLacQue.currentTime = 0;
+            soundLacQue.play().catch(()=>{});
 
             const container = document.getElementById('container');
             container.classList.add('shaking', 'shaking-cup');
 
+            // Sau 1.5 giây (thời gian lắc), quẻ ngừng và mở liễn
             setTimeout(() => {
                 container.classList.remove('shaking', 'shaking-cup');
                 openScroll();
-            }, 1500); // 1.5 giây lắc quẻ cọc cạch
+            }, 1500);
         }
 
         function openScroll() {
-            // NHẠC NỀN PHÁT TẠI ĐÂY - LÚC TẤM LIỄN BẮT ĐẦU BAY LÊN
+            // 2. PHÁT NHẠC NỀN CHÚC TẾT KHI LIỄN BẮT ĐẦU MỞ
             const music = document.getElementById('bgMusic');
             music.currentTime = 0; 
             music.volume = 0.5;
@@ -222,9 +226,9 @@
         }
 
         function closeScroll() {
-            // Dừng nhạc khi đóng liễn để lần sau phát lại từ đầu
-            const music = document.getElementById('bgMusic');
-            music.pause();
+            // Dừng cả hai âm thanh khi đóng
+            document.getElementById('bgMusic').pause();
+            document.getElementById('lacQueSound').pause();
 
             document.getElementById('lienWrapper').classList.remove('open');
             setTimeout(() => {
@@ -235,6 +239,7 @@
             }, 800);
         }
 
+        // PHÁO HOA
         function createParticle(x, y) {
             const colors = ['#FFD700', '#FF4500', '#FF69B4', '#00FFFF', '#ADFF2F'];
             for (let i = 0; i < 20; i++) {
