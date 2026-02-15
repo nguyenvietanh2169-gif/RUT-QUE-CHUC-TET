@@ -7,168 +7,276 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
+            --silk: #4e342e;
+            --paper: #f2e8cf;
+            --ink: #1a1a1a;
             --gold: #d4af37;
             --red-ancient: #8b0000;
-            --paper: #f2e8cf;
         }
 
-        /* Giữ nguyên CSS cũ của bạn cho body và container... */
-        body { margin: 0; background: #111 url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6492.JPG?raw=true') no-repeat center center fixed; background-size: cover; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; font-family: 'Segoe UI', serif; }
-        #container { position: relative; width: 320px; height: 480px; z-index: 10; cursor: pointer; display: flex; justify-content: center; }
-        .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
+        body {
+            margin: 0;
+            background: #111 url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6492.JPG?raw=true') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', serif;
+        }
+
+        body::before {
+            content: "";
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
+        /* ỐNG QUẺ */
+        #container {
+            position: relative;
+            width: 320px;
+            height: 480px;
+            z-index: 10;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+        }
+
+        .cup-layer { 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%; 
+            pointer-events: none; 
+        }
         #cup-back { z-index: 1; filter: brightness(0.3); }
         #cup-front { z-index: 5; filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8)); }
 
-        /* CSS Cụm quẻ (Giữ nguyên vị trí bạn đã ưng) */
-        .sticks-bundle { position: absolute; bottom: 225px; left: 38%; transform: translateX(-50%); width: 66px; height: 200px; z-index: 3; display: flex; justify-content: center; }
-        .stick-item { position: absolute; width: 95px; filter: brightness(0.85); bottom: 0; transition: all 0.5s ease; }
-
-        /* HIỆU ỨNG QUẺ BAY LÊN */
-        .stick-fly {
-            z-index: 1000 !important;
-            bottom: 400px !important;
-            left: 50% !important;
-            transform: translateX(-50%) scale(1.5) rotate(720deg) !important;
-            filter: brightness(1.2) drop-shadow(0 0 20px var(--gold)) !important;
-            opacity: 0;
+        /* KHÔI PHỤC VỊ TRÍ CỤM QUẺ CỦA BẠN */
+        .sticks-bundle {
+            position: absolute;
+            bottom: 225px; 
+            left: 38%; /* Trả về vị trí lệch trái bạn đã chọn */
+            transform: translateX(-50%);
+            width: 66px; 
+            height: 200px;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
         }
 
-        /* LỜI CHÚC KIỂU MỚI: HIỆN RA TỪ TÂM TỎA SÁNG */
-        #result-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none; z-index: 2000;
-            justify-content: center; align-items: center;
-            perspective: 1000px;
+        .stick-item {
+            position: absolute;
+            width: 95px; 
+            filter: brightness(0.85) contrast(1.1);
+            bottom: 0;
+            transition: transform 0.1s;
         }
 
-        .ancient-card {
-            width: 280px;
-            padding: 40px 20px;
+        /* HIỆU ỨNG LẮC */
+        .shaking .stick-item {
+            animation: shake-h 0.12s infinite alternate;
+        }
+        .shaking .stick-item:nth-child(even) { animation-delay: 0.06s; }
+
+        @keyframes shake-h {
+            0% { transform: translateX(-10px) rotate(var(--r)); }
+            100% { transform: translateX(10px) rotate(var(--r)); }
+        }
+
+        .shaking-cup { animation: cup-vibrate 0.1s infinite alternate; }
+        @keyframes cup-vibrate {
+            from { transform: rotate(-3deg); }
+            to { transform: rotate(3deg); }
+        }
+
+        /* CUỘN GIẤY THƯ PHÁP (SCROLL) */
+        #scroll-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            display: none;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #fireworks-canvas {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; pointer-events: none;
+        }
+
+        .scroll-wrapper {
+            position: relative; width: 30px; height: 80vh;
+            display: flex; align-items: center; justify-content: center;
+            transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 110;
+        }
+        .scroll-wrapper.open { width: 95vw; max-width: 480px; }
+
+        .scroll-content {
+            width: 100%; height: 95%;
             background: var(--paper);
-            border: 8px double var(--red-ancient);
+            background-image: 
+                url('https://www.transparenttextures.com/patterns/handmade-paper.png'),
+                radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(180,150,120,0.3) 100%);
+            border: 12px solid var(--silk);
+            box-shadow: 0 0 80px rgba(0,0,0,1);
+            display: flex; align-items: center; justify-content: center;
             position: relative;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.5);
-            transform: scale(0);
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .ancient-card.show { transform: scale(1); }
+        .scroll-content::after {
+            content: ""; position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid var(--red-ancient);
+            outline: 3px double var(--red-ancient);
+            outline-offset: -12px;
+        }
 
         .wish-text {
             font-family: 'Dancing Script', cursive;
+            color: var(--ink);
             font-size: 2.2rem;
-            color: #1a1a1a;
-            line-height: 1.5;
-            margin: 20px 0;
+            text-align: center;
+            white-space: pre-line;
             opacity: 0;
-            transition: opacity 1s 0.5s;
+            transition: opacity 0.8s 1s;
         }
-        .show .wish-text { opacity: 1; }
+        .open .wish-text { opacity: 1; }
 
-        /* Nút đóng cổ điển */
-        .close-btn {
-            margin-top: 20px;
-            padding: 10px 25px;
-            background: var(--red-ancient);
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            cursor: pointer;
-            font-weight: bold;
+        .roller {
+            position: absolute; width: 35px; height: 105%;
+            background: linear-gradient(to right, #1a0f0d, #5d4037, #1a0f0d);
+            border-radius: 4px; z-index: 120;
         }
+        .roller.left { left: 0; transform: translateX(-50%); }
+        .roller.right { right: 0; transform: translateX(50%); }
 
-        /* Animation lắc (Giữ nguyên của bạn) */
-        .shaking .stick-item { animation: shake-h 0.12s infinite alternate; }
-        @keyframes shake-h { 0% { transform: translateX(-10px) rotate(var(--r)); } 100% { transform: translateX(10px) rotate(var(--r)); } }
+        .btn-ui {
+            position: relative; z-index: 20;
+            margin-top: 30px; padding: 18px 60px;
+            background: var(--red-ancient); color: var(--gold);
+            border: 2px solid var(--gold); font-weight: bold;
+            cursor: pointer; letter-spacing: 2px; text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
 
-    <audio id="sfx" src="https://assets.mixkit.co/active_storage/sfx/1070/1070-preview.mp3" preload="auto"></audio>
-    <audio id="bgMusic" src="nhac-nen.mp3" loop></audio>
-
     <div id="container" onclick="startGieo()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         
-        <div class="sticks-bundle" id="bundle">
+        <div class="sticks-bundle">
             <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -8deg; left: 0%;">
             <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -4deg; left: 15%;">
-            <img id="lucky-stick" class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; left: 30%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; left: 30%;">
             <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 4deg; left: 45%;">
             <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 8deg; left: 60%;">
+            
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -2deg; left: 15%; z-index: 4; margin-bottom: -8px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 2deg; left: 38%; z-index: 4; margin-bottom: -8px;">
         </div>
         
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
 
-    <div id="result-overlay">
-        <div class="ancient-card" id="card">
-            <div style="color: var(--red-ancient); font-size: 1.2rem; font-weight: bold;">GIÁP QUẺ CHIÊM NGHIỆM</div>
-            <div class="wish-text" id="wishDisplay"></div>
-            <div style="border-top: 1px solid #ccc; padding-top: 10px; font-size: 0.9rem;">Năm Bính Ngọ 2026</div>
-            <button class="close-btn" onclick="closeResult()">LĨNH Ý</button>
+    <button class="btn-ui" id="btnAction" onclick="startGieo()">TÂM THÀNH Ý NGUYỆN</button>
+
+    <div id="scroll-overlay" onclick="closeScroll()">
+        <canvas id="fireworks-canvas"></canvas>
+        <div class="scroll-wrapper" id="scrollWrapper">
+            <div class="roller left"></div>
+            <div class="scroll-content">
+                <div class="wish-text" id="wishDisplay"></div>
+            </div>
+            <div class="roller right"></div>
         </div>
     </div>
 
     <script>
         const wishes = [
-            "Mã Đáo Thành Công\nVạn Sự Hanh Thông", 
-            "Thiên Ý Cát Tường\nPhú Quý Bình An",
-            "An Khang Thịnh Vượng\nSức Khỏe Dồi Dào"
-            // ... thêm các câu chúc khác của bạn vào đây
+            "Mã Đáo Thành Công\nVạn Sự Hanh Thông", "Thiên Ý Cát Tường\nPhú Quý Bình An",
+            "Ngũ Phúc Lâm Môn\nĐắc Lộc Toàn Gia", "Công Thành Danh Toại\nSự Nghiệp Thăng Hoa",
+            "An Khang Thịnh Vượng\nSức Khỏe Dồi Dào", "Vạn Kỳ Như Ý\nTấn Tài Tấn Lộc",
+            "Thân Tâm An Lạc\nTrí Tuệ Minh Mẫn", "Gia Hòa Vạn Sự Hưng\nHạnh Phúc Bền Lâu",
+            "Khai Xuân Đại Cát\nThuận Buồm Xuôi Gió", "Phong Thủy Hữu Tình\nTài Lộc Vô Biên",
+            "Kim Ngọc Mãn Đường\nPhúc Thọ Song Toàn", "Bách Nghiệp Hưng Thịnh\nThời Lai Vận Đáo",
+            "Cung Hỷ Phát Tài\nXuân Phong Đắc Ý", "Đức Tài Song Lập\nPhúc Trạch Vĩnh Miên",
+            "Tình Duyên Viên Mãn\nSong Hỷ Lâm Môn", "Học Vấn Tinh Thông\nBảng Vàng Đề Tên",
+            "Tiền Trình Tự Cẩm\nRạng Rỡ Tổ Tông", "Phúc Tinh Cao Chiếu\nSự Nghiệp Vững Bền",
+            "Vạn Cổ Trường Xuân\nPhú Quý Cát Tường", "Phúc Lộc Thọ Toàn\nSự Nghiệp Vinh Hiển"
         ];
 
         let active = false;
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
         function startGieo() {
             if (active) return;
             active = true;
-
-            // Chơi nhạc và sfx
-            const sfx = document.getElementById('sfx');
-            let soundInterval = setInterval(() => {
-                sfx.currentTime = 0;
-                sfx.play().catch(()=>{});
-            }, 200);
-
-            // Lắc ống
-            document.getElementById('container').classList.add('shaking');
+            document.getElementById('btnAction').style.visibility = 'hidden';
+            
+            const container = document.getElementById('container');
+            container.classList.add('shaking', 'shaking-cup');
 
             setTimeout(() => {
-                clearInterval(soundInterval);
-                document.getElementById('container').classList.remove('shaking');
-                
-                // Hiệu ứng quẻ bay lên
-                const luckyStick = document.getElementById('lucky-stick');
-                luckyStick.classList.add('stick-fly');
-
-                setTimeout(() => {
-                    showResult();
-                }, 600);
+                container.classList.remove('shaking', 'shaking-cup');
+                openScroll();
             }, 1500);
         }
 
-        function showResult() {
+        function openScroll() {
             const random = wishes[Math.floor(Math.random() * wishes.length)];
-            document.getElementById('wishDisplay').innerText = random;
-            document.getElementById('result-overlay').style.display = 'flex';
+            document.getElementById('wishDisplay').innerText = random + "\nBính Ngọ 2026";
+            document.getElementById('scroll-overlay').style.display = 'flex';
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
             
-            // Nhạc nền nhẹ nhàng phát khi hiện quẻ
-            document.getElementById('bgMusic').play().catch(()=>{});
-
             setTimeout(() => {
-                document.getElementById('card').classList.add('show');
+                document.getElementById('scrollWrapper').classList.add('open');
+                animateFireworks();
             }, 100);
         }
 
-        function closeResult() {
-            document.getElementById('card').classList.remove('show');
+        function closeScroll() {
+            document.getElementById('scrollWrapper').classList.remove('open');
             setTimeout(() => {
-                document.getElementById('result-overlay').style.display = 'none';
-                document.getElementById('lucky-stick').classList.remove('stick-fly');
+                document.getElementById('scroll-overlay').style.display = 'none';
+                document.getElementById('btnAction').style.visibility = 'visible';
                 active = false;
-            }, 600);
+                particles = [];
+            }, 800);
+        }
+
+        function createParticle(x, y) {
+            const colors = ['#FFD700', '#FF4500', '#FF69B4', '#00FFFF', '#ADFF2F'];
+            for (let i = 0; i < 20; i++) {
+                particles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10,
+                    alpha: 1,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+        }
+
+        function animateFireworks() {
+            if (!active) return;
+            if (Math.random() < 0.05) createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy; p.alpha -= 0.012;
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
+                if (p.alpha <= 0) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animateFireworks);
         }
     </script>
 </body>
