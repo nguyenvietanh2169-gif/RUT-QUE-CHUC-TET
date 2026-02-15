@@ -51,16 +51,16 @@
             width: 100%; 
             pointer-events: none; 
         }
-        #cup-back { z-index: 1; filter: brightness(0.4); }
+        #cup-back { z-index: 1; filter: brightness(0.3); }
         #cup-front { z-index: 5; filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8)); }
 
-        /* CỤM QUẺ CĂN CHÍNH GIỮA TUYỆT ĐỐI */
+        /* BÓ QUẺ SÁT NHAU - CĂN GIỮA TUYỆT ĐỐI */
         .sticks-bundle {
             position: absolute;
-            bottom: 220px; /* Độ cao quẻ nhú lên */
+            bottom: 230px; /* Nhô cao khỏi miệng ống */
             left: 50%;
             transform: translateX(-50%);
-            width: 180px; /* Chiều rộng cụm quẻ */
+            width: 100px; /* Bóp hẹp chiều rộng cụm để quẻ sát nhau */
             height: 200px;
             z-index: 3;
             display: flex;
@@ -69,36 +69,35 @@
 
         .stick-item {
             position: absolute;
-            width: 85px; /* Quẻ rất to */
-            filter: brightness(0.8);
+            width: 75px; /* Quẻ to */
+            filter: brightness(0.85) contrast(1.1);
             bottom: 0;
             transition: transform 0.1s;
+            /* Chồng khít các quẻ lên nhau */
         }
 
-        /* HIỆU ỨNG LẮC NGANG (LATERAL SHAKE) */
+        /* LẮC NGANG NHẸ NHÀNG */
         .shaking .stick-item {
             animation: shake-horizontal 0.1s infinite alternate;
         }
-        /* Tạo độ lệch pha để các cây quẻ va vào nhau */
-        .shaking .stick-item:nth-child(even) { animation-delay: 0.05s; }
-        .shaking .stick-item:nth-child(3n) { animation-duration: 0.12s; }
+        .shaking .stick-item:nth-child(even) { animation-delay: 0.04s; }
 
         @keyframes shake-horizontal {
-            0% { transform: translateX(-8px) rotate(var(--r)); }
-            100% { transform: translateX(8px) rotate(var(--r)); }
+            0% { transform: translateX(-5px) rotate(var(--r)); }
+            100% { transform: translateX(5px) rotate(var(--r)); }
         }
 
-        .shaking-cup { animation: cup-shake 0.1s infinite alternate; }
-        @keyframes cup-shake {
-            from { transform: rotate(-4deg); }
-            to { transform: rotate(4deg); }
+        .shaking-cup { animation: cup-vibrate 0.1s infinite alternate; }
+        @keyframes cup-vibrate {
+            from { transform: rotate(-2deg) translateX(-2px); }
+            to { transform: rotate(2deg) translateX(2px); }
         }
 
-        /* CUỘN GIẤY & PHÁO HOA */
+        /* THƯ PHÁP CỔ & PHÁO HOA */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.92);
             display: none;
             z-index: 100;
             justify-content: center;
@@ -111,21 +110,21 @@
         }
 
         .scroll-wrapper {
-            position: relative; width: 40px; height: 80vh;
+            position: relative; width: 30px; height: 80vh;
             display: flex; align-items: center; justify-content: center;
-            transition: width 1.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1);
             z-index: 110;
         }
-        .scroll-wrapper.open { width: 92vw; max-width: 500px; }
+        .scroll-wrapper.open { width: 95vw; max-width: 480px; }
 
         .scroll-content {
             width: 100%; height: 95%;
             background: var(--paper);
             background-image: 
                 url('https://www.transparenttextures.com/patterns/handmade-paper.png'),
-                radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(210,180,140,0.2) 100%);
+                radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(180,150,120,0.3) 100%);
             border: 12px solid var(--silk);
-            box-shadow: 0 0 60px rgba(0,0,0,0.9);
+            box-shadow: 0 0 80px rgba(0,0,0,1);
             display: flex; align-items: center; justify-content: center;
             position: relative;
         }
@@ -136,12 +135,13 @@
             border: 1px solid var(--red-ancient);
             outline: 3px double var(--red-ancient);
             outline-offset: -12px;
+            pointer-events: none;
         }
 
         .wish-text {
             font-family: 'Dancing Script', cursive;
             color: var(--ink);
-            font-size: 2.3rem;
+            font-size: 2.2rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
@@ -162,8 +162,8 @@
             margin-top: 30px; padding: 18px 60px;
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
-            cursor: pointer; letter-spacing: 3px; text-transform: uppercase;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            cursor: pointer; letter-spacing: 2px; text-transform: uppercase;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -173,14 +173,15 @@
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         
         <div class="sticks-bundle">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -5deg; left: 10%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -2deg; left: 25%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 1deg; left: 40%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 4deg; left: 55%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 7deg; left: 70%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -3deg; left: 20%; z-index: 4; margin-bottom: -5px;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; left: 35%; z-index: 4; margin-bottom: -5px;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 3deg; left: 50%; z-index: 4; margin-bottom: -5px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -3deg; left: 2%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -1deg; left: 5%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; left: 8%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 1deg; left: 11%;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 3deg; left: 14%;">
+            
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -2deg; left: 6%; z-index: 4; margin-bottom: -5px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; left: 9%; z-index: 4; margin-bottom: -5px;">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 2deg; left: 12%; z-index: 4; margin-bottom: -5px;">
         </div>
         
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
@@ -208,10 +209,10 @@
             "An Khang Thịnh Vượng\nSức Khỏe Dồi Dào", "Vạn Kỳ Như Ý\nTấn Tài Tấn Lộc",
             "Thân Tâm An Lạc\nTrí Tuệ Minh Mẫn", "Gia Hòa Vạn Sự Hưng\nHạnh Phúc Bền Lâu",
             "Khai Xuân Đại Cát\nThuận Buồm Xuôi Gió", "Phong Thủy Hữu Tình\nTài Lộc Vô Biên",
-            "Kim Ngọc Mãn Đường\nPhúc Thọ Song Toàn", "Bách Nghiệp Hưng Thịnh\nThời Lai Vận Đáo",
-            "Cung Hỷ Phát Tài\nXuân Phong Đắc Ý", "Đức Tài Song Lập\nPhúc Trạch Vĩnh Miên",
-            "Tình Duyên Viên Mãn\nSong Hỷ Lâm Môn", "Học Vấn Tinh Thông\nBảng Vàng Đề Tên",
-            "Tiền Trình Tự Cẩm\nRạng Rỡ Tổ Tông", "Phúc Tinh Cao Chiếu\nSự Nghiệp Vững Bền"
+            "Nhất Phẩm Đương Triều\nDanh Tiếng Vang Xa", "Kim Ngọc Mãn Đường\nPhúc Thọ Song Toàn",
+            "Bách Nghiệp Hưng Thịnh\nThời Lai Vận Đáo", "Cung Hỷ Phát Tài\nXuân Phong Đắc Ý",
+            "Đức Tài Song Lập\nPhúc Trạch Vĩnh Miên", "Tình Duyên Viên Mãn\nSong Hỷ Lâm Môn",
+            "Học Vấn Tinh Thông\nBảng Vàng Đề Tên", "Tiền Trình Tự Cẩm\nRạng Rỡ Tổ Tông"
         ];
 
         let active = false;
@@ -257,14 +258,13 @@
             }, 800);
         }
 
-        // FIREWORKS
         function createParticle(x, y) {
             const colors = ['#FFD700', '#FF4500', '#FF69B4', '#00FFFF', '#ADFF2F'];
-            for (let i = 0; i < 25; i++) {
+            for (let i = 0; i < 20; i++) {
                 particles.push({
                     x, y,
-                    vx: (Math.random() - 0.5) * 12,
-                    vy: (Math.random() - 0.5) * 12,
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10,
                     alpha: 1,
                     color: colors[Math.floor(Math.random() * colors.length)]
                 });
@@ -273,10 +273,10 @@
 
         function animateFireworks() {
             if (!active) return;
-            if (Math.random() < 0.08) createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
+            if (Math.random() < 0.05) createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach((p, i) => {
-                p.x += p.vx; p.y += p.vy; p.alpha -= 0.015;
+                p.x += p.vx; p.y += p.vy; p.alpha -= 0.012;
                 ctx.globalAlpha = p.alpha;
                 ctx.fillStyle = p.color;
                 ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
