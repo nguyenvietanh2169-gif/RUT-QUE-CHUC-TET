@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gieo Quẻ Bính Ngọ 2026</title>
+    <title>Gieo Quẻ Bính Ngọ 2026 - Cổ Kính</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --red-silk: #8b0000;
+            --red-silk: #7a0000;
             --gold: #d4af37;
-            /* Màu giấy xuyến chỉ có vân nhám */
-            --paper-texture: #f4f1ea; 
+            --ancient-paper: #e3dccb; /* Màu giấy cổ */
         }
 
         body {
@@ -26,66 +25,89 @@
 
         body::before {
             content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
             z-index: 0;
         }
 
-        /* ỐNG QUẺ VÀ 3 CÂY QUẺ */
+        /* ỐNG QUẺ TO GẤP ĐÔI */
         #container {
             position: relative;
-            width: 220px;
-            height: 400px;
+            width: 320px; /* Tăng kích thước */
+            height: 550px;
             z-index: 10;
             cursor: pointer;
             display: flex;
             justify-content: center;
+            overflow: hidden; /* Giữ quẻ không lòi ra dưới đáy */
         }
 
-        .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
-        #cup-back { z-index: 1; filter: brightness(0.4); }
-        #cup-front { z-index: 5; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.7)); }
+        .cup-layer { 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%; 
+            pointer-events: none; 
+        }
 
+        /* Ống quẻ mặt sau */
+        #cup-back { z-index: 1; filter: brightness(0.3) contrast(1.2); }
+        
+        /* Ống quẻ mặt trước */
+        #cup-front { 
+            z-index: 5; 
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); 
+        }
+
+        /* 3 CÂY QUẺ NẰM GIỮA 2 LỚP ỐNG */
         .stick-group {
             position: absolute;
-            bottom: 100px;
-            width: 45%;
+            bottom: 120px; /* Nằm sâu trong ống */
+            width: 15%; /* Thu nhỏ quẻ lại cho vừa ống to */
+            z-index: 3;
             transition: transform 0.1s;
+            filter: brightness(0.8);
         }
 
-        /* Lắc khác nhau cho 3 cây quẻ */
-        .shaking .s1 { animation: shake-stick 0.12s infinite alternate; }
-        .shaking .s2 { animation: shake-stick 0.08s infinite alternate-reverse; }
-        .shaking .s3 { animation: shake-stick 0.1s infinite alternate; animation-delay: 0.05s; }
+        /* Hiệu ứng lắc lệch pha */
+        .shaking .s1 { animation: shake-stick-1 0.12s infinite alternate; }
+        .shaking .s2 { animation: shake-stick-2 0.08s infinite alternate-reverse; }
+        .shaking .s3 { animation: shake-stick-3 0.1s infinite alternate; }
 
-        @keyframes shake-stick {
-            0% { transform: translateY(0) rotate(-2deg); }
-            100% { transform: translateY(-40px) rotate(3deg); }
+        @keyframes shake-stick-1 {
+            0% { transform: translateY(0) rotate(-5deg); }
+            100% { transform: translateY(-60px) rotate(-2deg); }
+        }
+        @keyframes shake-stick-2 {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-80px) rotate(3deg); }
+        }
+        @keyframes shake-stick-3 {
+            0% { transform: translateY(0) rotate(5deg); }
+            100% { transform: translateY(-50px) rotate(8deg); }
         }
 
-        @keyframes shake-cup {
-            0% { transform: rotate(-2deg); }
-            100% { transform: rotate(2deg); }
-        }
         .shaking-cup { animation: shake-cup 0.1s infinite; }
+        @keyframes shake-cup {
+            0% { transform: rotate(-3deg); }
+            100% { transform: rotate(3deg); }
+        }
 
-        /* CÂY QUẺ BAY */
+        /* CÂY QUẺ BAY LÊN */
         #flying-stick {
             position: fixed;
-            width: 45px;
+            width: 40px;
             z-index: 50;
             display: none;
             left: 50%;
-            bottom: 250px;
+            bottom: 300px;
             transform: translateX(-50%);
         }
 
-        /* CUỘN THƯ PHÁP */
+        /* CUỘN THƯ PHÁP CỔ KÍNH */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.9);
             display: none;
             z-index: 100;
             justify-content: center;
@@ -95,88 +117,85 @@
         .scroll-wrapper {
             position: relative;
             width: 40px;
-            height: 75vh;
-            max-height: 550px;
+            height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: width 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .scroll-wrapper.open {
             width: 90vw;
-            max-width: 450px;
+            max-width: 500px;
         }
 
-        /* GIẤY THƯ PHÁP CHÂN THẬT */
+        /* NỀN GIẤY CHÂN THỰC */
         .scroll-content {
             width: 100%;
             height: 90%;
-            background-color: var(--paper-texture);
-            /* Tạo vân giấy bằng gradient */
+            background: var(--ancient-paper);
+            /* Tạo vân giấy ố vàng và nhám */
             background-image: 
-                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
-                repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 10px);
-            border: 1px solid #d2b48c;
-            box-shadow: 
-                inset 0 0 60px rgba(0,0,0,0.1),
-                0 10px 40px rgba(0,0,0,0.6);
+                url('https://www.transparenttextures.com/patterns/handmade-paper.png'),
+                radial-gradient(circle, transparent 20%, rgba(0,0,0,0.05) 100%);
+            border: 2px solid #5d4037;
+            box-shadow: inset 0 0 100px rgba(139, 69, 19, 0.15), 0 0 50px rgba(0,0,0,0.7);
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             position: relative;
+            overflow: hidden;
         }
 
-        /* Viền đỏ sớ tết */
-        .scroll-content::after {
+        /* Viền thư pháp sờn cũ */
+        .scroll-content::before {
             content: "";
             position: absolute;
-            top: 15px; left: 15px; right: 15px; bottom: 15px;
-            border: 2px solid var(--red-silk);
-            outline: 4px double var(--red-silk);
-            outline-offset: -12px;
-            pointer-events: none;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid rgba(122, 0, 0, 0.6);
+            outline: 3px double var(--red-silk);
+            outline-offset: -10px;
+            opacity: 0.8;
         }
 
         .roller {
             position: absolute;
-            width: 28px;
+            width: 35px;
             height: 105%;
-            background: linear-gradient(to right, #2b1d1a, #5d4037, #2b1d1a);
-            border-radius: 5px;
-            z-index: 2;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            background: linear-gradient(to right, #2b1d1a, #5d4037, #8d6e63, #2b1d1a);
+            border-radius: 8px;
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
         .roller.left { left: 0; transform: translateX(-50%); }
         .roller.right { right: 0; transform: translateX(50%); }
 
         .wish-text {
             font-family: 'Dancing Script', cursive;
-            color: var(--red-silk);
+            color: #222; /* Màu mực tàu hơi đen nâu */
             font-size: 2.2rem;
             text-align: center;
             white-space: pre-line;
             opacity: 0;
-            z-index: 3;
-            transition: opacity 1s 1s;
-            filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.1));
+            z-index: 5;
+            transition: opacity 1s 1.2s;
+            filter: sepia(0.5);
         }
 
         .open .wish-text { opacity: 1; }
 
         .btn-ui {
             position: absolute;
-            bottom: 60px;
-            padding: 15px 35px;
+            bottom: 40px;
+            padding: 15px 40px;
             background: var(--red-silk);
             color: var(--gold);
-            border: 2px solid var(--gold);
+            border: 1px solid var(--gold);
             font-weight: bold;
             cursor: pointer;
             z-index: 20;
-            border-radius: 5px;
-            letter-spacing: 2px;
+            border-radius: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -185,9 +204,9 @@
     <div id="container" onclick="startGieo()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         
-        <img class="stick-group s1" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 20%; transform: rotate(-5deg);">
-        <img class="stick-group s2" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 30%; transform: rotate(2deg);">
-        <img class="stick-group s3" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 40%; transform: rotate(8deg);">
+        <img class="stick-group s1" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 35%;">
+        <img class="stick-group s2" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 42%;">
+        <img class="stick-group s3" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="left: 49%;">
         
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
@@ -204,7 +223,7 @@
         </div>
     </div>
 
-    <button class="btn-ui" id="btnAction">KHỞI TÂM XIN QUẺ</button>
+    <button class="btn-ui" id="btnAction">KHAI XUÂN GIEO QUẺ</button>
 
     <audio id="sfx" src="https://www.soundjay.com/misc/sounds/wooden-clatter-1.mp3"></audio>
 
@@ -215,7 +234,8 @@
             "Sức Khỏe Dồi Dào\nAn Khang Thịnh Vượng",
             "Công Thành Danh Toại\nSự Nghiệp Thăng Hoa",
             "Tình Duyên Viên Mãn\nHạnh Phúc Bền Lâu",
-            "Ngũ Phúc Lâm Môn\nPhú Quý Cát Tường"
+            "Ngũ Phúc Lâm Môn\nPhú Quý Cát Tường",
+            "Khai Xuân Đại Cát\nTấn Tài Tấn Lộc"
         ];
 
         let active = false;
@@ -226,14 +246,14 @@
             active = true;
             document.getElementById('btnAction').style.display = 'none';
 
-            sfx.play();
+            sfx.play().catch(()=>{});
             const container = document.getElementById('container');
             container.classList.add('shaking', 'shaking-cup');
 
             setTimeout(() => {
                 container.classList.remove('shaking', 'shaking-cup');
                 launchStick();
-            }, 1500);
+            }, 1600);
         }
 
         function launchStick() {
@@ -242,9 +262,9 @@
             
             const anim = fs.animate([
                 { bottom: '250px', transform: 'translateX(-50%) scale(1) rotate(0deg)', opacity: 1 },
-                { bottom: '50%', transform: 'translateX(-50%) translateY(50%) scale(2.5) rotate(1080deg)', opacity: 0 }
+                { bottom: '55%', transform: 'translateX(-50%) translateY(50%) scale(3) rotate(1440deg)', opacity: 0 }
             ], {
-                duration: 1200,
+                duration: 1400,
                 easing: 'ease-in-out'
             });
 
@@ -270,7 +290,7 @@
                 document.getElementById('scroll-overlay').style.display = 'none';
                 document.getElementById('btnAction').style.display = 'block';
                 active = false;
-            }, 800);
+            }, 1000);
         }
 
         document.getElementById('btnAction').onclick = (e) => {
