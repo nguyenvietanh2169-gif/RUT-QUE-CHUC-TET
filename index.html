@@ -9,6 +9,7 @@
         :root {
             --gold: #d4af37;
             --red-ancient: #8b0000;
+            --wine-red: #580000;
         }
 
         body {
@@ -24,11 +25,49 @@
             font-family: 'Segoe UI', serif;
         }
 
-        body::before {
-            content: "";
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 0;
+        /* TRANG ĐẦU FULL ĐỎ RƯỢU */
+        #screen-welcome {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--wine-red);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: opacity 0.8s ease;
+        }
+
+        #screen-welcome h2 {
+            color: var(--gold);
+            font-family: 'Charm', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        input#userName {
+            width: 70%;
+            max-width: 300px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .hint-shake {
+            color: var(--gold);
+            font-weight: 300;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            opacity: 0.8;
+            letter-spacing: 1px;
         }
 
         /* ỐNG QUẺ */
@@ -40,6 +79,8 @@
             cursor: pointer;
             display: flex;
             justify-content: center;
+            opacity: 0; /* Ẩn cho đến khi vào màn hình chính */
+            transition: opacity 1s ease;
         }
 
         .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
@@ -48,11 +89,9 @@
 
         .sticks-bundle {
             position: absolute;
-            bottom: 225px; 
-            left: 38%; 
+            bottom: 225px; left: 38%; 
             transform: translateX(-50%);
-            width: 60px; /* Thu hẹp độ rộng bundle để quẻ chụm hơn */
-            height: 200px;
+            width: 60px; height: 200px;
             z-index: 3;
         }
 
@@ -65,59 +104,41 @@
             transform: rotate(var(--r));
         }
 
-        /* HIỆU ỨNG LẮC CHẬM VÀ GỌN (HẾT LỘ KHỎI ỐNG) */
-        .shaking .stick-item {
-            animation: messy-shake var(--t) infinite ease-in-out alternate;
-        }
-
+        /* ANIMATION */
+        .shaking .stick-item { animation: messy-shake var(--t) infinite ease-in-out alternate; }
         @keyframes messy-shake {
-            0% { 
-                transform: rotate(calc(var(--r) - 3deg)) translateY(0px) translateX(-1px); 
-            }
-            50% { 
-                transform: rotate(calc(var(--r) + 4deg)) translateY(-10px) translateX(1.5px); 
-            }
-            100% { 
-                transform: rotate(calc(var(--r) - 2deg)) translateY(-3px) translateX(-0.5px); 
-            }
+            0% { transform: rotate(calc(var(--r) - 3deg)) translateY(0px) translateX(-1px); }
+            50% { transform: rotate(calc(var(--r) + 4deg)) translateY(-10px) translateX(1.5px); }
+            100% { transform: rotate(calc(var(--r) - 2deg)) translateY(-3px) translateX(-0.5px); }
         }
 
-        .shaking-cup { animation: cup-vibrate 0.2s infinite; } /* Làm chậm nhịp rung ống */
+        .shaking-cup { animation: cup-vibrate 0.2s infinite; }
         @keyframes cup-vibrate {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             50% { transform: translate(-1.5px, 0px) rotate(-1deg); }
             100% { transform: translate(1px, 1px) rotate(0deg); }
         }
 
-        /* LIỄN ĐỎ */
+        /* LIỄN */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85);
-            display: none;
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
+            display: none; z-index: 2000;
+            justify-content: center; align-items: center;
         }
 
-        #glitter-canvas {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
-        }
+        #glitter-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
         .lien-wrapper {
-            position: relative;
-            z-index: 10;
-            width: 90vw;
-            max-width: 500px;
-            height: 0;
+            position: relative; z-index: 10;
+            width: 90vw; max-width: 500px; height: 0;
             overflow: hidden;
             transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .lien-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 90vh;
+            position: absolute; top: 0; left: 0; width: 100%; height: 90vh;
             background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/background%20loi%20chuc%20(1)%20(1).png?raw=true') no-repeat center top;
             background-size: 100% 100%;
         }
@@ -125,37 +146,37 @@
         .lien-wrapper.open { height: 90vh; }
 
         .wish-text {
-            position: relative;
-            z-index: 11;
+            position: relative; z-index: 11;
             font-family: 'Charm', cursive;
             background: linear-gradient(to bottom, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.2rem;
-            text-align: center;
-            white-space: pre-line;
-            opacity: 0;
-            padding-top: 280px; 
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 2rem; text-align: center; white-space: pre-line;
+            opacity: 0; padding-top: 280px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             transition: opacity 0.8s 1s;
         }
         .open .wish-text { opacity: 1; }
 
         .btn-ui {
             position: relative; z-index: 20;
-            margin-top: 30px; padding: 18px 60px;
+            padding: 18px 60px;
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
             cursor: pointer; letter-spacing: 2px; border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
-    <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
+    <div id="screen-welcome">
+        <h2>Khai Quẻ Đầu Xuân</h2>
+        <input type="text" id="userName" placeholder="Nhập quý danh của bạn..." maxlength="20">
+        <button class="btn-ui" onclick="requestPermission()">TÂM THÀNH Ý NGUYỆN</button>
+        <div class="hint-shake">Lắc nhẹ điện thoại để nhận quẻ may mắn</div>
+    </div>
 
-    <div id="container" onclick="requestPermission()">
+    <div id="container">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
         <div class="sticks-bundle">
             <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -7deg; --t: 0.5s; left: 0%;">
@@ -169,8 +190,6 @@
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
 
-    <button class="btn-ui" id="btnAction" onclick="requestPermission()">TÂM THÀNH Ý NGUYỆN</button>
-
     <div id="scroll-overlay" onclick="closeScroll()">
         <canvas id="glitter-canvas"></canvas>
         <div class="lien-wrapper" id="lienWrapper">
@@ -179,40 +198,56 @@
         </div>
     </div>
 
+    <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
+    <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
+
     <script>
-        // ... (Toàn bộ phần Script giữ nguyên như code cũ của bạn vì logic đã chạy tốt)
         const wishes = [
-            "Ăn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
-            "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên\nKhông có gì phiền",
-            "Da đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
-            "Ăn ngon không mập\nNgủ kỹ không muộn\nMuộn phiền tự tan",
-            "Cuộc sống nở hoa\nDrama không có\nVí tiền tự to",
-            "Tâm an thân khỏe\nChẳng chút ưu phiền\nSống vui sống khoẻ\n Như tiên trên đời",
-            "Vàng ròng đầy tủ\nKim cương đầy khay\nLàm chơi ăn thật\nTiền về đầy tay",
-            "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết\nĐau đầu chọn xe",
-            "Thần Tài gõ cửa\nPhú quý vây quanh\nCát tường như ý\nTài lộc tươi xanh",
-            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ\n Không chờ cũng đến",
-            "Sức khỏe dẻo dai\nPhong độ bất bại\nĂn ngon ngủ kĩ\nTinh thần thảnh thơi",
-            "Tâm an thân khỏe\nChẳng chút ưu phiền\nVui vẻ như tiên",
-            "Vàng ròng đầy tủ\nKim cương đầy khay\nLộc về đầy tay",
-            "Đầu tư là trúng\nBốc quẻ là giàu\nTiền tiêu không hết",
-            "Thần Tài gõ cửa\nPhú quý vây quanh\nTài lộc tươi xanh",
-            "Vạn sự như ý\nTỷ sự như mơ\nTriệu điều bất ngờ",
-            "Sức khỏe dẻo dai\nPhong độ bất bại\nTinh thần xanh tươi"
+            "Chào {name},\nĂn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
+            "Quẻ chủ {name}:\nDa đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
+            "Mừng {name},\nĂn ngon không mập\nNgủ kỹ không muộn\nMuộn phiền tự tan",
+            "Chúc {name},\nCuộc sống nở hoa\nDrama không có\nVí tiền tự to",
+            "Quẻ cho {name}:\nTâm an thân khỏe\nVui vẻ như tiên\nLộc lá đầy miền"
         ];
 
         let active = false;
+        let sensorActive = false;
+        let userName = "";
         const canvas = document.getElementById('glitter-canvas');
         const ctx = canvas.getContext('2d');
         let points = [];
 
         function requestPermission() {
+            const input = document.getElementById('userName');
+            if (input.value.trim() === "") {
+                alert("Vui lòng nhập quý danh trước khi gieo quẻ!");
+                return;
+            }
+            userName = input.value.trim();
+
+            // Ẩn màn hình chào, hiện ống quẻ
+            document.getElementById('screen-welcome').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('screen-welcome').style.display = 'none';
+                document.getElementById('container').style.opacity = '1';
+            }, 800);
+
+            // Xin quyền cảm biến
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
                 DeviceMotionEvent.requestPermission().then(res => {
-                    if (res == 'granted') window.addEventListener('devicemotion', handleMotion);
+                    if (res == 'granted') {
+                        window.addEventListener('devicemotion', handleMotion);
+                        sensorActive = true;
+                    }
                 });
-            } else { window.addEventListener('devicemotion', handleMotion); }
-            startGieo();
+            } else { 
+                window.addEventListener('devicemotion', handleMotion);
+                sensorActive = true;
+            }
+            
+            // Bật nhạc nền nhẹ
+            document.getElementById('bgMusic').volume = 0.4;
+            document.getElementById('bgMusic').play().catch(()=>{});
         }
 
         function handleMotion(event) {
@@ -225,7 +260,6 @@
         function startGieo() {
             if (active) return;
             active = true;
-            document.getElementById('btnAction').style.visibility = 'hidden';
             document.getElementById('lacQueSound').play().catch(()=>{});
             document.getElementById('container').classList.add('shaking', 'shaking-cup');
             setTimeout(() => {
@@ -235,8 +269,8 @@
         }
 
         function openScroll() {
-            document.getElementById('bgMusic').play().catch(()=>{});
-            document.getElementById('wishDisplay').innerText = wishes[Math.floor(Math.random() * wishes.length)];
+            let randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+            document.getElementById('wishDisplay').innerText = randomWish.replace("{name}", userName);
             document.getElementById('scroll-overlay').style.display = 'flex';
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -248,16 +282,15 @@
         }
 
         function closeScroll() {
-            document.getElementById('bgMusic').pause();
             document.getElementById('lienWrapper').classList.remove('open');
             setTimeout(() => {
                 document.getElementById('scroll-overlay').style.display = 'none';
-                document.getElementById('btnAction').style.visibility = 'visible';
                 active = false;
                 points = [];
             }, 800);
         }
 
+        // Hiệu ứng hạt lấp lánh (giữ nguyên)
         function initGlitter() {
             for(let i=0; i<60; i++) {
                 points.push({
@@ -271,7 +304,7 @@
         }
 
         function animateGlitter() {
-            if (!active) return;
+            if (document.getElementById('scroll-overlay').style.display === 'none') return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#FFD700";
             points.forEach(p => {
