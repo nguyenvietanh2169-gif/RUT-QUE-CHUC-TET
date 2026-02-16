@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head <meta property="og:title" content="🧧 Gieo Quẻ Đầu Năm - Bính Ngọ 2026">
-<meta property="og:description" content="Nhấp vào để nhận lời chúc may mắn từ {Tên của bạn}">
-<meta property="og:image" content="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6765%20(1).jpg?raw=true">>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gieo Quẻ Bính Ngọ 2026</title>
@@ -117,12 +115,14 @@
         .lien-wrapper {
             position: relative; z-index: 2002; width: 90vw; max-width: 500px;
             height: 90vh; opacity: 0; transition: opacity 2s ease-in-out;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         .lien-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/background%20loi%20chuc%20(1)%20(1).png?raw=true') no-repeat center top;
             background-size: 100% 100%;
+            z-index: -1;
         }
 
         .lien-wrapper.open { opacity: 1; }
@@ -135,6 +135,14 @@
             white-space: pre-line; padding-top: 280px; 
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
             animation: textShimmer 3s linear infinite;
+        }
+
+        /* LOGO CỦA BẠN */
+        .user-logo {
+            width: 120px; /* Bạn có thể chỉnh kích thước tùy ý */
+            margin-top: 20px;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+            z-index: 12;
         }
 
         @keyframes textShimmer { to { background-position: 200% center; } }
@@ -179,6 +187,7 @@
         <div class="lien-wrapper" id="lienWrapper">
             <div class="lien-bg"></div>
             <div class="wish-text" id="wishDisplay"></div>
+            <img class="user-logo" src="https://github.com/nguyenvietanh2169-gif/LOI-CHUC-VIET-ANH/blob/main/Ba%CC%89n%20sao%20cu%CC%89a%20Ba%CC%89n%20sao%20cu%CC%89a%20logo%20vanzi%20ver%202%20(1).png?raw=true" alt="Logo">
         </div>
     </div>
 
@@ -259,14 +268,13 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             let elapsed = Date.now() - startTime;
 
-            // PHUN PHÁO HOA DÀY ĐẶC TRONG 1.5 GIÂY ĐẦU
             if (elapsed < 1500) {
-                for (let i = 0; i < 8; i++) { // Tăng số hạt mỗi frame
+                for (let i = 0; i < 8; i++) {
                     particles.push({
                         x: Math.random() * canvas.width,
                         y: canvas.height,
-                        vx: (Math.random() - 0.5) * 10, // Độ lan rộng hơn
-                        vy: -Math.random() * 20 - 10,   // Bắn cao hơn
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: -Math.random() * 20 - 10,
                         size: Math.random() * 4 + 2,
                         color: Math.random() > 0.5 ? "#FFD700" : "#FCF6BA",
                         alpha: 1,
@@ -274,7 +282,6 @@
                     });
                 }
             } else {
-                // Hạt lấp lánh rơi sau khi pháo dừng
                 if (Math.random() < 0.3) {
                     particles.push({
                         x: Math.random() * canvas.width,
