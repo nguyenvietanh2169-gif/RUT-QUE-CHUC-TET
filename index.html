@@ -9,7 +9,6 @@
         :root {
             --gold: #d4af37;
             --red-ancient: #8b0000;
-            --wine-red: #580000;
         }
 
         body {
@@ -32,7 +31,7 @@
             z-index: 0;
         }
 
-        /* TRANG ĐẦU VỚI HỌA TIẾT HÌNH QUẢ TRÁM SANG TRỌNG */
+        /* TRANG ĐẦU SỬ DỤNG ẢNH NỀN BẠN CUNG CẤP */
         #screen-welcome {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -43,18 +42,8 @@
             align-items: center;
             text-align: center;
             transition: opacity 0.8s ease;
-
-            /* Tạo họa tiết hình quả trám */
-            background-color: var(--wine-red);
-            background-image: 
-                linear-gradient(30deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
-                linear-gradient(150deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
-                linear-gradient(30deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
-                linear-gradient(150deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
-                linear-gradient(60deg, #6b0000 25%, transparent 25.5%, transparent 75%, #6b0000 75%, #6b0000),
-                linear-gradient(60deg, #6b0000 25%, transparent 25.5%, transparent 75%, #6b0000 75%, #6b0000);
-            background-size: 80px 140px;
-            background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+            background: #580000 url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6765%20(1).jpg?raw=true') no-repeat center center;
+            background-size: cover;
         }
 
         #screen-welcome h2 {
@@ -62,7 +51,7 @@
             font-family: 'Charm', cursive;
             font-size: 2.8rem;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
         }
 
         input#userName {
@@ -76,19 +65,19 @@
             font-size: 1.1rem;
             text-align: center;
             outline: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .hint-shake {
             color: var(--gold);
             font-size: 0.9rem;
             margin-top: 20px;
-            opacity: 0.8;
+            opacity: 0.9;
             font-style: italic;
-            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
-        /* ỐNG QUẺ - ĐÃ ĐẨY LÊN TRÊN */
+        /* ỐNG QUẺ - VỊ TRÍ ĐÃ ĐẨY LÊN TRÊN THEO YÊU CẦU */
         #container {
             position: relative;
             width: 320px;
@@ -199,7 +188,7 @@
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
             cursor: pointer; letter-spacing: 2px; border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -282,10 +271,13 @@
         function startGieo() {
             if (active) return;
             active = true;
+            
             const shakeSound = document.getElementById('lacQueSound');
             shakeSound.volume = 1.0; 
             shakeSound.play().catch(()=>{});
+
             document.getElementById('container').classList.add('shaking', 'shaking-cup');
+            
             setTimeout(() => {
                 document.getElementById('container').classList.remove('shaking', 'shaking-cup');
                 openScroll();
@@ -296,8 +288,10 @@
             const bgMusic = document.getElementById('bgMusic');
             bgMusic.volume = 0.6;
             bgMusic.play().catch(()=>{});
+            
             let randomWish = wishes[Math.floor(Math.random() * wishes.length)];
             document.getElementById('wishDisplay').innerText = randomWish.replace("{name}", userName);
+            
             document.getElementById('scroll-overlay').style.display = 'flex';
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
