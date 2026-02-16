@@ -74,7 +74,7 @@
             font-style: italic;
         }
 
-        /* ỐNG QUẺ - TRẢ VỀ VỊ TRÍ CŨ */
+        /* ỐNG QUẺ - ĐÃ ĐẨY LÊN TRÊN MỘT CHÚT */
         #container {
             position: relative;
             width: 320px;
@@ -83,6 +83,7 @@
             cursor: pointer;
             display: flex;
             justify-content: center;
+            margin-top: -80px; /* Đẩy cụm ống quẻ lên trên */
         }
 
         .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
@@ -244,13 +245,11 @@
             }
             userName = input.value.trim();
 
-            // Ẩn màn hình chào
             document.getElementById('screen-welcome').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('screen-welcome').style.display = 'none';
             }, 800);
 
-            // Xin quyền và lắng nghe cảm biến lắc
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
                 DeviceMotionEvent.requestPermission().then(res => {
                     if (res == 'granted') window.addEventListener('devicemotion', handleMotion);
@@ -268,8 +267,12 @@
         function startGieo() {
             if (active) return;
             active = true;
-            // Phát tiếng lắc quẻ
-            document.getElementById('lacQueSound').play().catch(()=>{});
+            
+            // ÂM THANH LẮC QUẺ TO HẾT CỠ
+            const shakeSound = document.getElementById('lacQueSound');
+            shakeSound.volume = 1.0; 
+            shakeSound.play().catch(()=>{});
+
             document.getElementById('container').classList.add('shaking', 'shaking-cup');
             
             setTimeout(() => {
@@ -279,8 +282,9 @@
         }
 
         function openScroll() {
-            // Sau khi lắc xong và mở liễn, mới phát nhạc Tết
-            document.getElementById('bgMusic').play().catch(()=>{});
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.6; // Nhạc nền vừa phải để không lấn lướt
+            bgMusic.play().catch(()=>{});
             
             let randomWish = wishes[Math.floor(Math.random() * wishes.length)];
             document.getElementById('wishDisplay').innerText = randomWish.replace("{name}", userName);
