@@ -2,227 +2,160 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gieo Quẻ Bính Ngọ 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #d4af37;
-            --red-ancient: #8b0000;
+            --gold-shine: linear-gradient(90deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --deep-red: #720000;
         }
 
         body {
-            margin: 0;
-            background: #111 url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6492.JPG?raw=true') no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            font-family: 'Segoe UI', serif;
+            margin: 0; padding: 0;
+            /* TẠO NỀN QUẢ TRÁM BẰNG CSS KHÔNG DÙNG ẢNH */
+            background-color: var(--deep-red);
+            background-image:  linear-gradient(30deg, #5c0000 12%, transparent 12.5%, transparent 87%, #5c0000 87.5%, #5c0000),
+                               linear-gradient(150deg, #5c0000 12%, transparent 12.5%, transparent 87%, #5c0000 87.5%, #5c0000),
+                               linear-gradient(30deg, #5c0000 12%, transparent 12.5%, transparent 87%, #5c0000 87.5%, #5c0000),
+                               linear-gradient(150deg, #5c0000 12%, transparent 12.5%, transparent 87%, #5c0000 87.5%, #5c0000),
+                               linear-gradient(60deg, #4b0000 25%, transparent 25.5%, transparent 75%, #4b0000 75%, #4b0000),
+                               linear-gradient(60deg, #4b0000 25%, transparent 25.5%, transparent 75%, #4b0000 75%, #4b0000);
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            overflow: hidden; font-family: 'Segoe UI', serif;
         }
 
-        body::before {
-            content: "";
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 0;
+        /* HIỆU ỨNG CHỮ VÀNG LONG LANH */
+        .gold-text {
+            background: var(--gold-shine);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            animation: shimmer 2s linear infinite;
+        }
+        @keyframes shimmer {
+            to { background-position: 200% center; }
         }
 
-        /* TRANG ĐẦU SỬ DỤNG ẢNH NỀN BẠN CUNG CẤP */
+        /* MÀN HÌNH CHÀO */
         #screen-welcome {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            transition: opacity 0.8s ease;
-            background: #580000 url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/IMG_6765%20(1).jpg?raw=true') no-repeat center center;
-            background-size: cover;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            transition: opacity 0.5s; background: inherit;
+        }
+        #screen-welcome::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4); z-index: -1;
         }
 
-        #screen-welcome h2 {
-            color: var(--gold);
-            font-family: 'Charm', cursive;
-            font-size: 2.8rem;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-        }
+        #screen-welcome h2 { font-family: 'Charm', cursive; font-size: 3rem; margin-bottom: 30px; }
 
         input#userName {
-            width: 70%;
-            max-width: 300px;
-            padding: 15px;
-            margin-bottom: 25px;
-            border: 2px solid var(--gold);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.95);
-            font-size: 1.1rem;
-            text-align: center;
-            outline: none;
+            width: 70%; max-width: 280px; padding: 15px; margin-bottom: 25px;
+            border: 2px solid #AA771C; border-radius: 10px; font-size: 1.1rem; text-align: center;
+            background: rgba(255, 255, 255, 0.9); outline: none;
+        }
+
+        .btn-ui {
+            padding: 15px 45px; background: #8b0000; color: #FCF6BA;
+            border: 2px solid #FCF6BA; font-weight: bold; border-radius: 30px; cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .hint-shake {
-            color: var(--gold);
-            font-size: 0.9rem;
-            margin-top: 20px;
-            opacity: 0.9;
-            font-style: italic;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-
-        /* ỐNG QUẺ - VỊ TRÍ ĐÃ ĐẨY LÊN TRÊN THEO YÊU CẦU */
+        /* ỐNG QUẺ VÀ 7 CÂY QUẺ */
         #container {
-            position: relative;
-            width: 320px;
-            height: 480px;
-            z-index: 10;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            margin-top: -80px; 
+            position: relative; width: 300px; height: 400px; z-index: 10;
+            display: flex; justify-content: center; cursor: pointer;
         }
-
         .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
-        #cup-back { z-index: 1; filter: brightness(0.3); }
-        #cup-front { z-index: 5; filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8)); }
+        #cup-back { z-index: 1; filter: brightness(0.4); }
+        #cup-front { z-index: 5; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.7)); }
 
         .sticks-bundle {
-            position: absolute;
-            bottom: 225px; 
-            left: 38%; 
-            transform: translateX(-50%);
-            width: 60px;
-            height: 200px;
-            z-index: 3;
+            position: absolute; bottom: 180px; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 180px; z-index: 3;
         }
-
         .stick-item {
-            position: absolute;
-            width: 95px; 
-            filter: brightness(0.85) contrast(1.1);
-            bottom: 0;
-            transform-origin: bottom center;
-            transform: rotate(var(--r));
+            position: absolute; width: 85px; bottom: 0;
+            transform-origin: bottom center; transform: rotate(var(--r));
         }
 
-        /* HIỆU ỨNG LẮC */
-        .shaking .stick-item {
-            animation: messy-shake var(--t) infinite ease-in-out alternate;
+        /* LẮC SINH ĐỘNG */
+        .shaking .stick-item { 
+            animation: lively-shake var(--t) infinite ease-in-out alternate; 
+            animation-delay: var(--dly);
+        }
+        @keyframes lively-shake {
+            0% { transform: rotate(calc(var(--r) - 4deg)); }
+            100% { transform: rotate(calc(var(--r) + 5deg)) scaleY(1.03); }
+        }
+        .shaking-cup { animation: cup-move 0.1s infinite; }
+        @keyframes cup-move {
+            0% { transform: translateX(-3px); }
+            100% { transform: translateX(3px); }
         }
 
-        @keyframes messy-shake {
-            0% { transform: rotate(calc(var(--r) - 3deg)) translateY(0px) translateX(-1px); }
-            50% { transform: rotate(calc(var(--r) + 4deg)) translateY(-10px) translateX(1.5px); }
-            100% { transform: rotate(calc(var(--r) - 2deg)) translateY(-3px) translateX(-0.5px); }
-        }
-
-        .shaking-cup { animation: cup-vibrate 0.2s infinite; }
-        @keyframes cup-vibrate {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            50% { transform: translate(-1.5px, 0px) rotate(-1deg); }
-            100% { transform: translate(1px, 1px) rotate(0deg); }
-        }
-
-        /* LIỄN ĐỎ */
+        /* HIỂN THỊ LIỄN */
         #scroll-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); display: none; z-index: 2000;
+            justify-content: center; align-items: center;
         }
-
-        #glitter-canvas {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
-        }
+        #fw-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2001; }
 
         .lien-wrapper {
-            position: relative;
-            z-index: 10;
-            width: 90vw;
-            max-width: 500px;
-            height: 0;
-            overflow: hidden;
-            transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative; width: 90vw; max-width: 450px; height: 85vh;
+            opacity: 0; z-index: 2002; transition: opacity 2s ease-in-out; /* HIỆU ỨNG RÕ DẦN */
         }
-
+        .lien-wrapper.show { opacity: 1; }
         .lien-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 90vh;
-            background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/background%20loi%20chuc%20(1)%20(1).png?raw=true') no-repeat center top;
+            width: 100%; height: 100%;
+            background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/background%20loi%20chuc%20(1)%20(1).png?raw=true') no-repeat center;
             background-size: 100% 100%;
         }
 
-        .lien-wrapper.open { height: 90vh; }
-
         .wish-text {
-            position: relative;
-            z-index: 11;
-            font-family: 'Charm', cursive;
-            background: linear-gradient(to bottom, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.2rem;
-            text-align: center;
-            white-space: pre-line;
-            opacity: 0;
-            padding-top: 280px; 
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            transition: opacity 0.8s 1s;
-        }
-        .open .wish-text { opacity: 1; }
-
-        .btn-ui {
-            position: relative; z-index: 20;
-            padding: 18px 60px;
-            background: var(--red-ancient); color: var(--gold);
-            border: 2px solid var(--gold); font-weight: bold;
-            cursor: pointer; letter-spacing: 2px; border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: absolute; top: 32%; width: 100%; left: 0;
+            font-family: 'Charm', cursive; font-size: 2rem;
+            line-height: 1.6; color: #AA771C; text-align: center;
         }
     </style>
 </head>
 <body>
 
     <div id="screen-welcome">
-        <h2>Gieo Quẻ Bính Ngọ</h2>
-        <input type="text" id="userName" placeholder="Nhập quý danh của bạn..." maxlength="20">
-        <button class="btn-ui" onclick="initApp()">TÂM THÀNH Ý NGUYỆN</button>
-        <div class="hint-shake">Lắc nhẹ điện thoại để nhận quẻ may mắn</div>
+        <h2 class="gold-text">Gieo Quẻ Bính Ngọ</h2>
+        <input type="text" id="userName" placeholder="Nhập tên của bạn..." maxlength="15">
+        <button class="btn-ui" onclick="initApp()">KHỞI TÂM GIEO QUẺ</button>
+        <div style="color:#FCF6BA; margin-top:25px; font-style:italic; font-weight:bold;">Lắc điện thoại để nhận quẻ</div>
     </div>
 
-    <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
-    <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
+    <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop></audio>
+    <audio id="lacSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3"></audio>
 
-    <div id="container">
+    <div id="container" onclick="startGieo()">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
-        <div class="sticks-bundle">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -7deg; --t: 0.5s; left: 0%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -3deg; --t: 0.75s; left: 10%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 0deg; --t: 0.6s; left: 25%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 4deg; --t: 0.8s; left: 40%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 7deg; --t: 0.7s; left: 55%;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: -2deg; --t: 0.55s; left: 15%; z-index: 4; margin-bottom: -5px;">
-            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r: 3deg; --t: 0.65s; left: 35%; z-index: 4; margin-bottom: -5px;">
+        <div class="sticks-bundle" id="sticks">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r:-7deg; --t:0.12s; --dly:0s; left:0%">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r:-3deg; --t:0.15s; --dly:0.05s; left:10%">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r:0deg; --t:0.1s; --dly:0.02s; left:25%">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r:4deg; --t:0.14s; --dly:0.07s; left:40%">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r:7deg; --t:0.13s; --dly:0.03s; left:55%">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r:-2deg; --t:0.11s; --dly:0.06s; left:15%; z-index:4">
+            <img class="stick-item" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/que.png?raw=true" style="--r:3deg; --t:0.16s; --dly:0.04s; left:35%; z-index:4">
         </div>
         <img id="cup-front" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
     </div>
 
-    <div id="scroll-overlay" onclick="closeScroll()">
-        <canvas id="glitter-canvas"></canvas>
+    <div id="scroll-overlay" onclick="location.reload()">
+        <canvas id="fw-canvas"></canvas>
         <div class="lien-wrapper" id="lienWrapper">
             <div class="lien-bg"></div>
-            <div class="wish-text" id="wishDisplay"></div>
+            <div class="wish-text gold-text" id="wishDisplay"></div>
         </div>
     </div>
 
@@ -231,111 +164,74 @@
             "Chào {name},\nĂn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
             "{name} ơi,\nDa đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
             "Mừng {name},\nĂn ngon không mập\nNgủ kỹ không muộn\nMuộn phiền tự tan",
-            "Chúc {name},\nTâm an thân khỏe\nChẳng chút ưu phiền\nVui vẻ như tiên",
-            "{name} thân mến,\nVàng ròng đầy tủ\nKim cương đầy khay\nLộc về đầy tay"
+            "Chúc {name},\nTâm an thân khỏe\nVui vẻ như tiên",
+            "{name} thân mến,\nVàng ròng đầy tủ\nLộc về đầy tay"
         ];
 
         let active = false;
         let userName = "";
-        const canvas = document.getElementById('glitter-canvas');
+        const canvas = document.getElementById('fw-canvas');
         const ctx = canvas.getContext('2d');
-        let points = [];
+        let particles = [];
 
         function initApp() {
-            const input = document.getElementById('userName');
-            if (input.value.trim() === "") {
-                alert("Bạn chưa nhập tên mà!");
-                return;
-            }
-            userName = input.value.trim();
-
+            userName = document.getElementById('userName').value.trim() || "Bạn";
             document.getElementById('screen-welcome').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('screen-welcome').style.display = 'none';
-            }, 800);
-
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission().then(res => {
-                    if (res == 'granted') window.addEventListener('devicemotion', handleMotion);
+            setTimeout(() => { document.getElementById('screen-welcome').style.display = 'none'; }, 500);
+            
+            if (window.DeviceMotionEvent) {
+                window.addEventListener('devicemotion', (e) => {
+                    let acc = e.accelerationIncludingGravity;
+                    if (!active && (Math.abs(acc.x) > 20 || Math.abs(acc.y) > 20)) startGieo();
                 });
-            } else { window.addEventListener('devicemotion', handleMotion); }
-        }
-
-        function handleMotion(event) {
-            if (active) return;
-            let acc = event.accelerationIncludingGravity;
-            let speed = Math.abs(acc.x + acc.y + acc.z);
-            if (speed > 22) startGieo();
+            }
         }
 
         function startGieo() {
-            if (active) return;
-            active = true;
-            
-            const shakeSound = document.getElementById('lacQueSound');
-            shakeSound.volume = 1.0; 
-            shakeSound.play().catch(()=>{});
-
+            if (active) return; active = true;
+            document.getElementById('lacSound').play();
             document.getElementById('container').classList.add('shaking', 'shaking-cup');
-            
-            setTimeout(() => {
-                document.getElementById('container').classList.remove('shaking', 'shaking-cup');
-                openScroll();
-            }, 1800);
+            setTimeout(showResult, 2000);
         }
 
-        function openScroll() {
-            const bgMusic = document.getElementById('bgMusic');
-            bgMusic.volume = 0.6;
-            bgMusic.play().catch(()=>{});
-            
-            let randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-            document.getElementById('wishDisplay').innerText = randomWish.replace("{name}", userName);
-            
+        function showResult() {
+            document.getElementById('container').classList.remove('shaking', 'shaking-cup');
             document.getElementById('scroll-overlay').style.display = 'flex';
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            initGlitter();
-            setTimeout(() => {
-                document.getElementById('lienWrapper').classList.add('open');
-                animateGlitter();
-            }, 100);
-        }
-
-        function closeScroll() {
-            document.getElementById('bgMusic').pause();
-            document.getElementById('bgMusic').currentTime = 0;
-            document.getElementById('lienWrapper').classList.remove('open');
-            setTimeout(() => {
-                document.getElementById('scroll-overlay').style.display = 'none';
-                active = false;
-                points = [];
-            }, 800);
-        }
-
-        function initGlitter() {
-            for(let i=0; i<60; i++) {
-                points.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2 + 1,
-                    speed: Math.random() * 1 + 0.5,
-                    opacity: Math.random()
+            document.getElementById('wishDisplay').innerText = wishes[Math.floor(Math.random()*wishes.length)].replace("{name}", userName);
+            
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            let startFireworks = Date.now();
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // PHÁO HOA BẮN TỪ DƯỚI LÊN TRONG 1.5 GIÂY
+                if (Date.now() - startFireworks < 1500) {
+                    for(let i=0; i<6; i++) {
+                        particles.push({
+                            x: Math.random() * canvas.width, y: canvas.height,
+                            vx: (Math.random() - 0.5) * 6, vy: Math.random() * -18,
+                            size: Math.random() * 3 + 1, life: 1
+                        });
+                    }
+                }
+                
+                particles.forEach((p, i) => {
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life -= 0.015;
+                    if (p.life <= 0) particles.splice(i, 1);
+                    ctx.fillStyle = `rgba(255, 220, 100, ${p.life})`;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
                 });
+                
+                requestAnimationFrame(animate);
             }
-        }
+            animate();
 
-        function animateGlitter() {
-            if (!active) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#FFD700";
-            points.forEach(p => {
-                p.y += p.speed;
-                if (p.y > canvas.height) p.y = -10;
-                ctx.globalAlpha = Math.abs(Math.sin(Date.now() * 0.001 + p.x));
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(animateGlitter);
+            // LIỄN HIỆN RÕ DẦN SAU KHI PHÁO HOA KẾT THÚC (1.5 GIÂY)
+            setTimeout(() => {
+                document.getElementById('bgMusic').play();
+                document.getElementById('lienWrapper').classList.add('show');
+            }, 1500);
         }
     </script>
 </body>
