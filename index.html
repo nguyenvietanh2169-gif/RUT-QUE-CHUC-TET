@@ -32,11 +32,10 @@
             z-index: 0;
         }
 
-        /* TRANG ĐẦU FULL ĐỎ RƯỢU */
+        /* TRANG ĐẦU VỚI HỌA TIẾT HÌNH QUẢ TRÁM SANG TRỌNG */
         #screen-welcome {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--wine-red);
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -44,37 +43,52 @@
             align-items: center;
             text-align: center;
             transition: opacity 0.8s ease;
+
+            /* Tạo họa tiết hình quả trám */
+            background-color: var(--wine-red);
+            background-image: 
+                linear-gradient(30deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
+                linear-gradient(150deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
+                linear-gradient(30deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
+                linear-gradient(150deg, #4a0000 12%, transparent 12.5%, transparent 87%, #4a0000 87.5%, #4a0000),
+                linear-gradient(60deg, #6b0000 25%, transparent 25.5%, transparent 75%, #6b0000 75%, #6b0000),
+                linear-gradient(60deg, #6b0000 25%, transparent 25.5%, transparent 75%, #6b0000 75%, #6b0000);
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
         }
 
         #screen-welcome h2 {
             color: var(--gold);
             font-family: 'Charm', cursive;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         input#userName {
             width: 70%;
             max-width: 300px;
             padding: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border: 2px solid var(--gold);
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             font-size: 1.1rem;
             text-align: center;
             outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .hint-shake {
             color: var(--gold);
-            font-size: 0.85rem;
-            margin-top: 15px;
-            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            opacity: 0.8;
             font-style: italic;
+            letter-spacing: 1px;
         }
 
-        /* ỐNG QUẺ - ĐÃ ĐẨY LÊN TRÊN MỘT CHÚT */
+        /* ỐNG QUẺ - ĐÃ ĐẨY LÊN TRÊN */
         #container {
             position: relative;
             width: 320px;
@@ -83,7 +97,7 @@
             cursor: pointer;
             display: flex;
             justify-content: center;
-            margin-top: -80px; /* Đẩy cụm ống quẻ lên trên */
+            margin-top: -80px; 
         }
 
         .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
@@ -133,7 +147,7 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85);
             display: none;
-            z-index: 100;
+            z-index: 2000;
             justify-content: center;
             align-items: center;
         }
@@ -185,6 +199,7 @@
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
             cursor: pointer; letter-spacing: 2px; border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -192,9 +207,9 @@
 
     <div id="screen-welcome">
         <h2>Gieo Quẻ Bính Ngọ</h2>
-        <input type="text" id="userName" placeholder="Nhập tên của bạn..." maxlength="20">
+        <input type="text" id="userName" placeholder="Nhập quý danh của bạn..." maxlength="20">
         <button class="btn-ui" onclick="initApp()">TÂM THÀNH Ý NGUYỆN</button>
-        <div class="hint-shake">Lắc điện thoại để nhận quẻ</div>
+        <div class="hint-shake">Lắc nhẹ điện thoại để nhận quẻ may mắn</div>
     </div>
 
     <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
@@ -267,14 +282,10 @@
         function startGieo() {
             if (active) return;
             active = true;
-            
-            // ÂM THANH LẮC QUẺ TO HẾT CỠ
             const shakeSound = document.getElementById('lacQueSound');
             shakeSound.volume = 1.0; 
             shakeSound.play().catch(()=>{});
-
             document.getElementById('container').classList.add('shaking', 'shaking-cup');
-            
             setTimeout(() => {
                 document.getElementById('container').classList.remove('shaking', 'shaking-cup');
                 openScroll();
@@ -283,12 +294,10 @@
 
         function openScroll() {
             const bgMusic = document.getElementById('bgMusic');
-            bgMusic.volume = 0.6; // Nhạc nền vừa phải để không lấn lướt
+            bgMusic.volume = 0.6;
             bgMusic.play().catch(()=>{});
-            
             let randomWish = wishes[Math.floor(Math.random() * wishes.length)];
             document.getElementById('wishDisplay').innerText = randomWish.replace("{name}", userName);
-            
             document.getElementById('scroll-overlay').style.display = 'flex';
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
