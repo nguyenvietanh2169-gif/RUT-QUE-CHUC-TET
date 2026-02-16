@@ -25,6 +25,13 @@
             font-family: 'Segoe UI', serif;
         }
 
+        body::before {
+            content: "";
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
         /* TRANG ĐẦU FULL ĐỎ RƯỢU */
         #screen-welcome {
             position: fixed;
@@ -44,7 +51,6 @@
             font-family: 'Charm', cursive;
             font-size: 2.5rem;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
 
         input#userName {
@@ -58,19 +64,17 @@
             font-size: 1.1rem;
             text-align: center;
             outline: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .hint-shake {
             color: var(--gold);
-            font-weight: 300;
             font-size: 0.85rem;
             margin-top: 15px;
-            opacity: 0.8;
-            letter-spacing: 1px;
+            opacity: 0.7;
+            font-style: italic;
         }
 
-        /* ỐNG QUẺ */
+        /* ỐNG QUẺ - TRẢ VỀ VỊ TRÍ CŨ */
         #container {
             position: relative;
             width: 320px;
@@ -79,8 +83,6 @@
             cursor: pointer;
             display: flex;
             justify-content: center;
-            opacity: 0; /* Ẩn cho đến khi vào màn hình chính */
-            transition: opacity 1s ease;
         }
 
         .cup-layer { position: absolute; bottom: 0; width: 100%; pointer-events: none; }
@@ -89,9 +91,11 @@
 
         .sticks-bundle {
             position: absolute;
-            bottom: 225px; left: 38%; 
+            bottom: 225px; 
+            left: 38%; 
             transform: translateX(-50%);
-            width: 60px; height: 200px;
+            width: 60px;
+            height: 200px;
             z-index: 3;
         }
 
@@ -104,8 +108,11 @@
             transform: rotate(var(--r));
         }
 
-        /* ANIMATION */
-        .shaking .stick-item { animation: messy-shake var(--t) infinite ease-in-out alternate; }
+        /* HIỆU ỨNG LẮC */
+        .shaking .stick-item {
+            animation: messy-shake var(--t) infinite ease-in-out alternate;
+        }
+
         @keyframes messy-shake {
             0% { transform: rotate(calc(var(--r) - 3deg)) translateY(0px) translateX(-1px); }
             50% { transform: rotate(calc(var(--r) + 4deg)) translateY(-10px) translateX(1.5px); }
@@ -119,26 +126,35 @@
             100% { transform: translate(1px, 1px) rotate(0deg); }
         }
 
-        /* LIỄN */
+        /* LIỄN ĐỎ */
         #scroll-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85);
-            display: none; z-index: 2000;
-            justify-content: center; align-items: center;
+            display: none;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
         }
 
-        #glitter-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        #glitter-canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
 
         .lien-wrapper {
-            position: relative; z-index: 10;
-            width: 90vw; max-width: 500px; height: 0;
+            position: relative;
+            z-index: 10;
+            width: 90vw;
+            max-width: 500px;
+            height: 0;
             overflow: hidden;
             transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .lien-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 90vh;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 90vh;
             background: url('https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/background%20loi%20chuc%20(1)%20(1).png?raw=true') no-repeat center top;
             background-size: 100% 100%;
         }
@@ -146,12 +162,18 @@
         .lien-wrapper.open { height: 90vh; }
 
         .wish-text {
-            position: relative; z-index: 11;
+            position: relative;
+            z-index: 11;
             font-family: 'Charm', cursive;
             background: linear-gradient(to bottom, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-size: 2rem; text-align: center; white-space: pre-line;
-            opacity: 0; padding-top: 280px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
+            text-align: center;
+            white-space: pre-line;
+            opacity: 0;
+            padding-top: 280px; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             transition: opacity 0.8s 1s;
         }
         .open .wish-text { opacity: 1; }
@@ -162,19 +184,20 @@
             background: var(--red-ancient); color: var(--gold);
             border: 2px solid var(--gold); font-weight: bold;
             cursor: pointer; letter-spacing: 2px; border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
 
     <div id="screen-welcome">
-        <h2>Khai Quẻ Đầu Xuân</h2>
-        <input type="text" id="userName" placeholder="Nhập quý danh của bạn..." maxlength="20">
-        <button class="btn-ui" onclick="requestPermission()">TÂM THÀNH Ý NGUYỆN</button>
-        <div class="hint-shake">Lắc nhẹ điện thoại để nhận quẻ may mắn</div>
+        <h2>Gieo Quẻ Bính Ngọ</h2>
+        <input type="text" id="userName" placeholder="Nhập tên của bạn..." maxlength="20">
+        <button class="btn-ui" onclick="initApp()">TÂM THÀNH Ý NGUYỆN</button>
+        <div class="hint-shake">Lắc điện thoại để nhận quẻ</div>
     </div>
+
+    <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
+    <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
 
     <div id="container">
         <img id="cup-back" class="cup-layer" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/blob/main/ong%20que.png?raw=true">
@@ -198,56 +221,41 @@
         </div>
     </div>
 
-    <audio id="bgMusic" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/nhac%20tet.mp3" loop preload="auto"></audio>
-    <audio id="lacQueSound" src="https://github.com/nguyenvietanh2169-gif/RUT-QUE-CHUC-TET/raw/refs/heads/main/%C4%90u%CC%9Bo%CC%9B%CC%80ng%20An%20Chu%208_Audio%20Denoise%20(mp3cut.net).mp3" preload="auto"></audio>
-
     <script>
         const wishes = [
             "Chào {name},\nĂn nhiều không béo\nNợ nần tự héo\nVí tiền dẻo dai",
-            "Quẻ chủ {name}:\nDa đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
+            "{name} ơi,\nDa đẹp như tiên\nTiền đầy như biển\nVạn sự bình yên",
             "Mừng {name},\nĂn ngon không mập\nNgủ kỹ không muộn\nMuộn phiền tự tan",
-            "Chúc {name},\nCuộc sống nở hoa\nDrama không có\nVí tiền tự to",
-            "Quẻ cho {name}:\nTâm an thân khỏe\nVui vẻ như tiên\nLộc lá đầy miền"
+            "Chúc {name},\nTâm an thân khỏe\nChẳng chút ưu phiền\nVui vẻ như tiên",
+            "{name} thân mến,\nVàng ròng đầy tủ\nKim cương đầy khay\nLộc về đầy tay"
         ];
 
         let active = false;
-        let sensorActive = false;
         let userName = "";
         const canvas = document.getElementById('glitter-canvas');
         const ctx = canvas.getContext('2d');
         let points = [];
 
-        function requestPermission() {
+        function initApp() {
             const input = document.getElementById('userName');
             if (input.value.trim() === "") {
-                alert("Vui lòng nhập quý danh trước khi gieo quẻ!");
+                alert("Bạn chưa nhập tên mà!");
                 return;
             }
             userName = input.value.trim();
 
-            // Ẩn màn hình chào, hiện ống quẻ
+            // Ẩn màn hình chào
             document.getElementById('screen-welcome').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('screen-welcome').style.display = 'none';
-                document.getElementById('container').style.opacity = '1';
             }, 800);
 
-            // Xin quyền cảm biến
+            // Xin quyền và lắng nghe cảm biến lắc
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
                 DeviceMotionEvent.requestPermission().then(res => {
-                    if (res == 'granted') {
-                        window.addEventListener('devicemotion', handleMotion);
-                        sensorActive = true;
-                    }
+                    if (res == 'granted') window.addEventListener('devicemotion', handleMotion);
                 });
-            } else { 
-                window.addEventListener('devicemotion', handleMotion);
-                sensorActive = true;
-            }
-            
-            // Bật nhạc nền nhẹ
-            document.getElementById('bgMusic').volume = 0.4;
-            document.getElementById('bgMusic').play().catch(()=>{});
+            } else { window.addEventListener('devicemotion', handleMotion); }
         }
 
         function handleMotion(event) {
@@ -260,8 +268,10 @@
         function startGieo() {
             if (active) return;
             active = true;
+            // Phát tiếng lắc quẻ
             document.getElementById('lacQueSound').play().catch(()=>{});
             document.getElementById('container').classList.add('shaking', 'shaking-cup');
+            
             setTimeout(() => {
                 document.getElementById('container').classList.remove('shaking', 'shaking-cup');
                 openScroll();
@@ -269,8 +279,12 @@
         }
 
         function openScroll() {
+            // Sau khi lắc xong và mở liễn, mới phát nhạc Tết
+            document.getElementById('bgMusic').play().catch(()=>{});
+            
             let randomWish = wishes[Math.floor(Math.random() * wishes.length)];
             document.getElementById('wishDisplay').innerText = randomWish.replace("{name}", userName);
+            
             document.getElementById('scroll-overlay').style.display = 'flex';
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -282,6 +296,8 @@
         }
 
         function closeScroll() {
+            document.getElementById('bgMusic').pause();
+            document.getElementById('bgMusic').currentTime = 0;
             document.getElementById('lienWrapper').classList.remove('open');
             setTimeout(() => {
                 document.getElementById('scroll-overlay').style.display = 'none';
@@ -290,7 +306,6 @@
             }, 800);
         }
 
-        // Hiệu ứng hạt lấp lánh (giữ nguyên)
         function initGlitter() {
             for(let i=0; i<60; i++) {
                 points.push({
@@ -304,7 +319,7 @@
         }
 
         function animateGlitter() {
-            if (document.getElementById('scroll-overlay').style.display === 'none') return;
+            if (!active) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#FFD700";
             points.forEach(p => {
